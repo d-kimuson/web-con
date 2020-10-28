@@ -1,0 +1,40 @@
+{
+  "editor.tabSize": 2,
+  // python
+  "[python]": {
+    "editor.tabSize": 4
+  },
+  "python.venvPath": "backend/.venv",
+  "python.pythonPath": "${workspaceFolder}/backend/.venv/bin/python",
+  "python.formatting.provider": "autopep8",
+  "python.linting.flake8Enabled": true,
+  "python.linting.flake8Args": [
+    "--config=backend/.flake8",
+    "--exclude config/settings",  // .flake8 の設定が適用されないので止む無く
+  ],
+  // TypeScript & JavaScript
+  // ESLint
+  "eslint.workingDirectories": [
+    "./frontend"
+  ],
+  "eslint.options": {
+    "configFile": ".eslintrc.js"
+  },
+  "eslint.validate": [
+    "javascript",
+    "typescript",
+  ],
+  "eslint.alwaysShowStatus": true,
+  // Stylelint
+  "stylelint.enable": true,
+  "stylelint.configBasedir": "frontend",
+  // Lint On Save
+  "editor.formatOnSave": false,
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true,
+    "source.fixAll.stylelint": true,
+  },
+  // Invalidate other formatters
+  "css.validate": false,
+  "scss.validate": false,
+}
