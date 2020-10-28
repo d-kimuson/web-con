@@ -17,5 +17,5 @@ $ pipenv run start
 
 ``` bash
 $ cd frontend
-$ cd yarn dev
+$ yarn dev
 ```
