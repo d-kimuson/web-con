@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'webpack_loader',
     'accounts.apps.AccountsConfig',
-    'sample.apps.SampleConfig',
+    'web-con.apps.WebConConfig',
 ]
 
 ROOT_URLCONF = 'config.urls'
