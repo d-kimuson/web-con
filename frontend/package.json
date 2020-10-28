@@ -42,7 +42,10 @@
   },
   "scripts": {
     "build": "webpack --mode=production",
-    "dev": "webpack-dev-server --mode=development"
+    "dev": "webpack-dev-server --mode=development",
+    "lint": "yarn run lint:eslint && yarn run lint:stylelint",
+    "lint:eslint": "eslint static --ext .ts --fix",
+    "lint:stylelint": "stylelint 'static/styles/**/*.scss' --fix"
   },
   "dependencies": {
     "modern-css-reset": "^1.1.1"
