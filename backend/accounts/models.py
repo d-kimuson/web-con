@@ -7,7 +7,7 @@ import uuid
 from typing import List
 
 
-class UserManager(BaseUserManager):
+class UserManager(BaseUserManager):  # type: ignore
     def _create_user(self, email: str, password: str, is_staff: bool, is_superuser: bool) -> 'User':
         user = self.model(
             email=self.normalize_email(email),

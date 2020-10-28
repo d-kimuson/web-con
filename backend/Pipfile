@@ -21,3 +21,5 @@ python_version = "3.8"
 
 [scripts]
 start = "python manage.py runserver"
+setup = "bash -c 'pipenv install --dev && cp .env.sample .env && python manage.py migrate'"
+check = "bash -c 'python manage.py check && flake8 . && mypy .'"
