@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 import os
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 SECRET_KEY = os.environ.get('SECRET_KEY', '')
 
@@ -84,7 +84,7 @@ AUTH_USER_MODEL = 'accounts.User'
 # All Auth
 SITE_ID = 1
 # SOCIALACCOUNT_PROVIDERS = {}
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_USER_MODEL_USERNAME_FIELD: Optional[str] = None
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
