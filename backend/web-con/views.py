@@ -4,3 +4,7 @@ from django.http import HttpRequest, HttpResponse
 
 def index(request: HttpRequest) -> HttpResponse:
     return render(request, 'index.html', {})
+
+
+def search(request: HttpRequest) -> HttpRequest:
+    return render(request, 'index.html', {})
