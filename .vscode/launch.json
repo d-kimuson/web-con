@@ -1,0 +1,28 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+      {
+          "name": "Django",
+          "type": "python",
+          "request": "launch",
+          "stopOnEntry": false,
+          "pythonPath": "${workspaceRoot}/backend/.venv/bin/python",
+          "program": "${workspaceRoot}/backend/manage.py",
+          "cwd": "${workspaceRoot}/backend",
+          "args": [
+              "runserver",
+          ],
+          "env": {},
+          "envFile": "${workspaceRoot}/backend/.env",
+      },
+      {
+        "name": "Frontend",
+        "type": "node",
+        "request": "launch",
+        "stopOnEntry": false,
+        "runtimeExecutable": "yarn",
+        "cwd": "${workspaceRoot}/frontend",
+        "runtimeArgs": ["dev"],
+      }
+  ]
+}
