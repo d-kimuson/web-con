@@ -1,16 +1,15 @@
 {% extends 'base.html' %}
 {% load render_bundle from webpack_loader %}
 
-{% block title %}Index{% endblock %}
+{% block title %}Room Not Found{% endblock %}
 
 {% block content %}
 <section>
-  <h1 class="m-page-title">This is Index Page!</h1>
-
+  <h1 class="m-page-title">部屋が見つかりません</h1>
   <a href="{% url 'web_con:search' %}">部屋を探す</a>
 </section>
 {% endblock %}
 
 {% block external_footer %}
-{% render_bundle 'index' 'js' %}
+{% render_bundle 'call' 'js' %}
 {% endblock %}

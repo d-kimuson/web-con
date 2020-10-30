@@ -5,8 +5,11 @@
     "editor.tabSize": 4
   },
   "python.languageServer": "Pylance",
-  "python.venvPath": "${workspaceFolder}/backend/.venv",
-  "python.pythonPath": "${workspaceFolder}/backend/.venv/bin/python",
+  "python.venvPath": "backend/.venv",
+  "python.pythonPath": "backend/.venv/bin/python",
+  "python.analysis.extraPaths": [
+    "backend"
+  ],
   "python.terminal.activateEnvironment": true,
   "python.formatting.provider": "autopep8",
   "python.linting.flake8Enabled": true,
@@ -16,8 +19,8 @@
   ],
   "python.analysis.typeCheckingMode": "off",
   "python.linting.mypyEnabled": false,
-  // ⇓ 各々の絶対パスを入力する ⇓
-  "mypy.executable": "/path/to/web_con/backend/.venv/bin/mypyls",
+  // ⇓ メンバーの絶対パスを入力する ⇓
+  "mypy.executable": "/paht/to/web-con/backend/.venv/bin/mypyls",
   "mypy.configFile": "./backend/mypy.ini",
   "mypy.targets": [
     "./backend"
