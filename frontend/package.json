@@ -5,7 +5,7 @@
   "license": "MIT",
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^4.4.1",
-    "@typescript-eslint/parser": "^4.4.1",
+    "@typescript-eslint/parser": "^4.6.0",
     "autoprefixer": "^10.0.1",
     "clean-webpack-plugin": "^3.0.0",
     "css-loader": "^5.0.0",
@@ -48,6 +48,7 @@
     "lint:stylelint": "stylelint 'static/styles/**/*.scss' --fix"
   },
   "dependencies": {
-    "modern-css-reset": "^1.1.1"
+    "modern-css-reset": "^1.1.1",
+    "skyway-js": "^3.1.0"
   }
 }
