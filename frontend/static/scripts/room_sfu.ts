@@ -1,99 +1,96 @@
-import Peer from "skyway-js"
+import Peer, { SfuRoom } from "skyway-js"
+import { VideoElement, getElementById } from "@scripts/util"
 
-interface VideoElement extends HTMLVideoElement {
-  playsInline: boolean
-}
+export const setupSfuRoom = async (): Promise<void> => {
+  const roomMode = `sfu`
+  const roomKey = `7ddc9b1a-aac8-4f60-a5f8-bc8703c3a125`
 
-const getElementById = (id: string) => {
-  const elm = document.getElementById(id)
-  if (elm !== null) {
-    return elm
-  } else {
-    throw new Error(`HTMLElemet: id=${id}が存在しません`)
-  }
-}
-
-;(async () => {
+  // setup
   const url = new URL(location.href)
   const roomId = url.pathname.split(`/`).slice(-1)[0]
-  const roomMode = `sfu`
-
   const peer = new Peer({
-    key: `7ddc9b1a-aac8-4f60-a5f8-bc8703c3a125`,
+    key: roomKey,
     debug: 3,
   })
 
-  const localVideo = <VideoElement>getElementById(`js-local-stream`)
-  const remoteVideos = getElementById(`js-remote-streams`)
+  // handled elements
+  const localVideoElement = <VideoElement>getElementById(`js-local-stream`)
+  const remoteVideoElements = getElementById(`js-remote-streams`)
+  const chatInputElement = <HTMLInputElement>getElementById(`js-local-text`)
+  const sendButton = getElementById(`js-send-trigger`)
+  const joinButton = getElementById(`js-join-trigger`)
+  const leaveButton = getElementById(`js-leave-trigger`)
+  const chatContainer = getElementById(`js-messages`)
 
-  const localText = <HTMLInputElement>getElementById(`js-local-text`)
-
-  const joinTrigger = getElementById(`js-join-trigger`)
-  const leaveTrigger = getElementById(`js-leave-trigger`)
-
-  const sendTrigger = getElementById(`js-send-trigger`)
-  const messages = getElementById(`js-messages`)
-
+  // local stream (カメラとマイクのストリーム)
   const localStream = <MediaStream>await navigator.mediaDevices
     .getUserMedia({
       audio: true,
       video: true,
     })
-    .catch(console.error)
+    .catch(() => alert(`カメラとマイクを許可してください`))
 
-  localVideo.muted = true
-  localVideo.srcObject = localStream
-  localVideo.playsInline = true
+  localVideoElement.muted = true
+  localVideoElement.srcObject = localStream
+  localVideoElement.playsInline = true
+  await localVideoElement.play().catch(console.error)
 
-  await localVideo.play().catch(console.error)
-
-  joinTrigger.addEventListener(`click`, () => {
+  // ボタンのハンドリング
+  joinButton.addEventListener(`click`, () => {
     if (!peer.open) {
       return
     }
 
-    const room = peer.joinRoom(roomId, {
+    const room = peer.joinRoom<SfuRoom>(roomId, {
       mode: roomMode,
       stream: localStream,
     })
 
+    // イベントハンドリング
     room.once(`open`, () => {
-      messages.textContent += `=== You joined ===\n`
+      // ルームに自分が参加
+      chatContainer.textContent += `=== You joined ===\n`
     })
     room.on(`peerJoin`, (peerId) => {
-      messages.textContent += `=== ${peerId} joined ===\n`
+      // 他 peer (ユーザー)がルームに参加
+      chatContainer.textContent += `=== ${peerId} joined ===\n`
     })
 
-    // Render remote stream for new peer join in the room
     room.on(`stream`, async (stream) => {
+      // 他ユーザーのストリームが追加
       const newVideo = <VideoElement>document.createElement(`video`)
       newVideo.srcObject = stream
       newVideo.playsInline = true
       newVideo.setAttribute(`data-peer-id`, stream.peerId)
-      remoteVideos.append(newVideo)
+      remoteVideoElements.append(newVideo)
       await newVideo.play().catch(console.error)
     })
 
     room.on(`data`, ({ data, src }) => {
-      messages.textContent += `${src}: ${data}\n`
+      // 他ユーザーから data(チャット) が書き込まれた
+      chatContainer.textContent += `${src}: ${data}\n`
     })
 
     room.on(`peerLeave`, (peerId) => {
+      // 他 peer(ユーザー)がルームを退出
       const remoteVideo = <VideoElement>(
-        remoteVideos.querySelector(`[data-peer-id="${peerId}"]`)
+        remoteVideoElements.querySelector(`[data-peer-id="${peerId}"]`)
       )
       const videoSrc = <MediaStream>remoteVideo.srcObject
       videoSrc.getTracks().forEach((track) => track.stop())
       remoteVideo.srcObject = null
       remoteVideo.remove()
 
-      messages.textContent += `=== ${peerId} left ===\n`
+      chatContainer.textContent += `=== ${peerId} left ===\n`
     })
 
     room.once(`close`, () => {
-      sendTrigger.removeEventListener(`click`, onClickSend)
-      messages.textContent += `== You left ===\n`
-      const videoElemnts = <VideoElement[]>Array.from(remoteVideos.children)
+      // 自分がルームを退出
+      sendButton.removeEventListener(`click`, onClickSend)
+      chatContainer.textContent += `== You left ===\n`
+      const videoElemnts = <VideoElement[]>(
+        Array.from(remoteVideoElements.children)
+      )
 
       videoElemnts.forEach((videoElement) => {
         const videoSrc = <MediaStream>videoElement.srcObject
@@ -103,16 +100,16 @@ const getElementById = (id: string) => {
       })
     })
 
-    sendTrigger.addEventListener(`click`, onClickSend)
-    leaveTrigger.addEventListener(`click`, () => room.close(), { once: true })
+    sendButton.addEventListener(`click`, onClickSend)
+    leaveButton.addEventListener(`click`, () => room.close(), { once: true })
 
     function onClickSend() {
-      room.send(localText.value)
+      room.send(chatInputElement.value)
 
-      messages.textContent += `${peer.id}: ${localText.value}\n`
-      localText.value = ``
+      chatContainer.textContent += `${peer.id}: ${chatInputElement.value}\n`
+      chatInputElement.value = ``
     }
   })
 
   peer.on(`error`, console.error)
-})()
+}

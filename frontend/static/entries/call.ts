@@ -1,1 +1,3 @@
-import "@scripts/room_sfu"
+import { setupSfuRoom } from "@scripts/room_sfu"
+
+setupSfuRoom()
