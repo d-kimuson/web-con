@@ -16,6 +16,3 @@ stop:
 
 connect:
 	mysql $(DB_NAME) -h127.0.0.1 -u$(DB_USER) -p$(DB_PSWD)
-
-dangerously_remove:
-	rm -rf ./data
