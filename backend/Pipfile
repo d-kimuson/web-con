@@ -18,6 +18,8 @@ pytest-django = "*"
 django = "*"
 django-webpack-loader = "*"
 django-allauth = "*"
+mysqlclient = "*"
+python-dotenv = "*"
 
 [requires]
 python_version = "3.8"
