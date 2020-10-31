@@ -20,11 +20,18 @@
   "python.analysis.typeCheckingMode": "off",
   "python.linting.mypyEnabled": false,
   // ⇓ メンバーの絶対パスを入力する ⇓
-  "mypy.executable": "/paht/to/web-con/backend/.venv/bin/mypyls",
+  "mypy.executable": "/path/to/web-con/backend/.venv/bin/mypyls",
   "mypy.configFile": "./backend/mypy.ini",
   "mypy.targets": [
-    "./backend"
+    "./backend",
   ],
+  "python.testing.unittestEnabled": false,
+  "python.testing.nosetestsEnabled": false,
+  "python.testing.pytestEnabled": true,
+  "python.testing.pytestArgs": [
+    "backend"
+  ],
+  "python.testing.pytestPath": "${workspaceFolder}/backend/.venv/bin/pytest",
   // TypeScript & JavaScript
   // ESLint
   "eslint.workingDirectories": [
