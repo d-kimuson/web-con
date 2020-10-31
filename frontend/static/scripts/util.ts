@@ -1,8 +1,3 @@
-export interface VideoElement extends HTMLVideoElement {
-  // playsInline を付加した HTMLVideoElement
-  playsInline: boolean
-}
-
 export const getElementById = (id: string): HTMLElement => {
   // null でない要素を id から取得する関数
   // 存在してない id に対しては例外をなげる

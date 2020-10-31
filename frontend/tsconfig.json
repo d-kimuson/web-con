@@ -24,6 +24,9 @@
     },
     "strict": true,
   },
+  "files": [
+    "./static/@types/globals.d.ts"
+  ],
   "include": [
     "./static/**/*",
   ],
