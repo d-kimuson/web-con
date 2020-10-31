@@ -3,4 +3,3 @@
 BINARY_PATH=$(git rev-parse --show-toplevel)/bin/
 
 bash $BINARY_PATH/check.sh
-bash $BINARY_PATH/test.sh
