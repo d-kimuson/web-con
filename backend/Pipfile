@@ -11,6 +11,8 @@ ipython = "*"
 mypy = "*"
 flake8 = "*"
 mypyls = {file = "https://github.com/matangover/mypyls/archive/master.zip"}
+pytest = "*"
+pytest-django = "*"
 
 [packages]
 django = "*"
@@ -25,3 +27,4 @@ start = "python manage.py runserver"
 setup = "bash -c 'pipenv install --dev && cp .env.sample .env && python manage.py migrate'"
 sync  = "bash -c 'pipenv install --dev && python manage.py migrate'"
 check = "bash -c 'python manage.py check && flake8 .'"
+test  = "py.test"
