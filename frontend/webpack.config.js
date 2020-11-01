@@ -7,6 +7,13 @@ const { merge } = require('webpack-merge');
 const BundleTracker = require('webpack-bundle-tracker');
 const { TsconfigPathsPlugin } = require('tsconfig-paths-webpack-plugin');
 
+const sassLoaderOptions = {
+  implementation: require('sass'),
+  sassOptions: {
+    fiber: require('fibers'),
+  },
+}
+
 const entries = {}
 for (const fileName of require('fs').readdirSync(path.resolve(__dirname, 'static', 'entries'))) {
   entries[fileName.split('.')[0]] = `./static/entries/${fileName}`
@@ -54,6 +61,23 @@ const baseConfig = {
   module: {
     rules: [
       {
+        test: /\.(svelte)$/,
+        exclude: /node_modules/,
+        use: {
+          loader: 'svelte-loader',
+          options: {
+            // emitCss: true,  // 下の問題が修正されるまで、禁止
+            // https://github.com/sveltejs/svelte-loader/pull/136
+            preprocess: require('svelte-preprocess')({
+              scss: sassLoaderOptions,
+              postcss: {
+                plugins: require('./postcss.config').plugins
+              }
+            })
+          }
+        },
+      },
+      {
         test: /\.(ts|tsx)$/,
         use: [
           {
@@ -88,18 +112,11 @@ const baseConfig = {
             },
           },
           {
-            loader: 'postcss-loader',
+            loader: 'postcss-loader'
           },
           {
             loader: 'sass-loader',
-
-            options: {
-              sourceMap: false,
-              implementation: require('sass'),
-              sassOptions: {
-                fiber: require('fibers'),
-              },
-            },
+            options: sassLoaderOptions
           },
         ],
       },
