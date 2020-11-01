@@ -1,4 +1,5 @@
 SHELL=/bin/bash
+
 CONT_NAME := web_con_mysql
 IMAGE_NAME := web_con_mysql
 DB_NAME := web_con_django
@@ -14,7 +15,7 @@ start:
 restart:
 	# 起動済みのコンテナ&イメージを廃棄して、起動する
 	make stop && make remove
-	make start
+	make _build && make _start
 
 stop:
 	docker stop $(CONT_NAME)

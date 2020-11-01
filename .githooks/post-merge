@@ -2,5 +2,4 @@
 
 BINARY_PATH=$(git rev-parse --show-toplevel)/bin/
 
-bash $BINARY_PATH/start_db.sh
 bash $BINARY_PATH/sync.sh

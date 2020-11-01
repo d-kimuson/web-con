@@ -1,0 +1,22 @@
+[
+  {
+    "model": "accounts.user",
+    "pk": "fec67ca0-141b-4301-901d-7e1de5e95818",
+    "fields": {
+      "last_login": "2020-11-01T03:05:18.762Z",
+      "email": "admin@example.com",
+      "password": "pbkdf2_sha256$216000$gmz0AmP7UoHf$/Jg5M7//jt0wUzxrUdBu3K8DlMVTtar4Yr2M7KoRtuQ=",
+      "is_staff": true,
+      "is_superuser": true,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "web_con.room",
+    "pk": "305acb21-ab14-4e4d-8634-797b7f8cc494",
+    "fields": {
+      "title": "大学生集まれー！"
+    }
+  }
+]

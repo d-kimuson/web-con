@@ -1,9 +1,14 @@
 #!/bin/bash
 
-PREVIOUS_DIRECTORY=$(pwd)
-cd $(git rev-parse --show-toplevel)
+BINARY_PATH=$(git rev-parse --show-toplevel)/bin
 
-bash -c "cd backend && pipenv run sync"
-bash -c "cd frontend && yarn install"
+PREVIOUS_DIRECTORY=$(pwd)
+
+cd $(git rev-parse --show-toplevel)/backend
+bash $BINARY_PATH/start_db.sh
+pipenv run sync
+
+cd ../frontend
+yarn install
 
 cd $PREVIOUS_DIRECTORY

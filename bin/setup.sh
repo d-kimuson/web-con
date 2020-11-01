@@ -1,25 +1,14 @@
 #!/bin/bash
 
-BINARY_PATH=$(git rev-parse --show-toplevel)/bin/
-
-function setup_backend() {
-  # database
-  bash $BINARY_PATH/start_db.sh
-  # django application
-  pipenv run setup
-}
-
-function setup_frontend() {
-  yarn install
-}
+BINARY_PATH=$(git rev-parse --show-toplevel)/bin
 
 PREVIOUS_DIRECTORY=$(pwd)
 cd $(git rev-parse --show-toplevel)
 
 git config core.hooksPath .githooks
 if [ "$PIPENV_VENV_IN_PROJECT" = "1" ]; then
-  cd backend && setup_backend
-  cd ../frontend && setup_frontend
+  cd backend && pipenv run setup
+  bash $BINARY_PATH/sync.sh
 else
   echo "環境変数: PIPENV_VENV_IN_PROJECT=1を設定してください";
   exit 1;
