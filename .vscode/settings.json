@@ -48,6 +48,9 @@
   // Stylelint
   "stylelint.enable": true,
   "stylelint.configBasedir": "frontend",
+  "stylelint.configOverrides": {
+    "ignoreFiles": ["**/*.js", "**/*.ts", "**/*.svelte"]
+  },
   // Lint On Save
   "editor.formatOnSave": false,
   "editor.codeActionsOnSave": {
