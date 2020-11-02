@@ -3,6 +3,7 @@
     // frontend
     "dbaeumer.vscode-eslint",
     "stylelint.vscode-stylelint",
+    "svelte.svelte-vscode",
     // backend
     "ms-python.python",
     "ms-python.vscode-pylance",
