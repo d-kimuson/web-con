@@ -7,23 +7,6 @@
 <section>
   <h1 class="m-page-title">通話画面: {{ object.title }}</h1>
 
-  <div class="room">
-    <div>
-      <video id="js-local-stream"></video>
-      <button id="js-join-trigger">参加する</button>
-      <button id="js-leave-trigger">一次退席</button>
-    </div>
-
-    <div class="remote-streams" id="js-remote-streams"></div>
-
-    <div>
-      <pre class="messages" id="js-messages"></pre>
-      <input type="text" id="js-local-text">
-      <button id="js-send-trigger">Send</button>
-    </div>
-  </div>
-  <p class="meta" id="js-meta"></p>
-
   <div id="svelte"></div>
 </section>
 {% endblock %}

@@ -1,3 +1,3 @@
 interface HTMLVideoElement {
-  playsInline: boolean
+  playsInline?: boolean
 }

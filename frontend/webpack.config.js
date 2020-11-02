@@ -28,10 +28,14 @@ const baseConfig = {
   },
   resolve: {
     modules: [path.resolve(__dirname, 'node_modules')],
-    extensions: ['.js', '.ts', '.css', '.scss'],
+    extensions: ['.mjs', '.js', '.ts', '.css', '.scss', '.svelte'],
+    mainFields: ['svelte', 'browser', 'module', 'main'],
     plugins: [new TsconfigPathsPlugin({
       configFile: path.resolve(__dirname, 'tsconfig.json'),
     })],
+    alias: {
+      svelte: path.resolve('node_modules', 'svelte')
+    }
   },
   plugins: [
     new BundleTracker({

@@ -1,8 +1,6 @@
 {
   "name": "django-modern-front-sample",
   "version": "1.0.0",
-  "main": "index.js",
-  "modules": "index.js",
   "license": "MIT",
   "devDependencies": {
     "@tsconfig/svelte": "^1.0.10",
@@ -38,20 +36,21 @@
     "ts-loader": "^8.0.5",
     "tsconfig-paths-webpack-plugin": "^3.3.0",
     "typescript": "^4.0.3",
-    "webpack": "^5.1.0",
+    "webpack": "^4.16.3",
     "webpack-bundle-tracker": "0",
-    "webpack-cli": "3",
-    "webpack-dev-server": "^3.11.0",
-    "webpack-merge": "^5.2.0"
+    "webpack-cli": "^3.1.0",
+    "webpack-dev-server": "^3.1.5",
+    "webpack-merge": "^5.3.0"
   },
   "scripts": {
     "build": "webpack --mode=production",
     "dev": "webpack-dev-server --mode=development",
     "lint": "yarn run lint:eslint && yarn run lint:stylelint",
     "lint:eslint": "eslint static --ext .ts --fix",
-    "lint:stylelint": "stylelint 'static/styles/**/*.{scss}' --fix"
+    "lint:stylelint": "stylelint 'static/styles/**/*.scss' --fix"
   },
   "dependencies": {
+    "dayjs": "^1.9.4",
     "modern-css-reset": "^1.1.1",
     "skyway-js": "^3.1.0",
     "svelte": "^3.29.4"
