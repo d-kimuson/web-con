@@ -4,23 +4,32 @@
 {% block title %}Search{% endblock %}
 
 {% block content %}
-<section>
+<div>
   <h1 class="m-page-title">This is Search Page!</h1>
-
-  <ul>
-    {% for room in object_list %}
-    <li>
-      <a href="{% url 'web_con:call' room.pk %}">
-        {% for roomtag in room.roomtag.all %}
-          <div>
-            {{ roomtag.tag.name }}
-          </div>
+  <div class="search-body">
+    <section >
+      <ul>
+        {% for room in object_list %}
+        <li>
+          <a href="{% url 'web_con:call' room.pk %}">
+            {% for roomtag in room.roomtag.all %}
+              <div>
+                {{ roomtag.tag.name }}
+              </div>
+            {% endfor %}
+          </a>
+        </li>
         {% endfor %}
-      </a>
-    </li>
-    {% endfor %}
-  </ul>
-</section>
+      </ul>
+    </section>
+    <section class='detailed-search'>
+      <h2>詳細検索</h2>
+      <input type="text" class="detail-text">
+    </section>
+  </div>
+  <a href="#">他の部屋を探す</a>
+</div>
+
 {% endblock %}
 
 {% block external_footer %}
