@@ -41,3 +41,40 @@ class Room(models.Model):
         return "Room <{}>".format(self.id)
 
     __str__ = __repr__
+
+class Tag(models.Model):
+    id = models.UUIDField(
+        default=uuid.uuid4,
+        primary_key=True,
+        editable=False
+    )
+    name = models.CharField(
+        max_length=127,
+        unique=True)
+
+    def __repr__(self) -> str:
+        return "Tag <{}>".format(self.id)
+
+    __str__ = __repr__
+
+class RoomTag(models.Model):
+    id = models.UUIDField(
+        default=uuid.uuid4,
+        primary_key=True,
+        editable=False
+    )
+    room = models.ForeignKey(
+        Room,
+        on_delete=models.CASCADE
+    )
+    tag = models.ForeignKey(
+        Tag,
+        on_delete=models.CASCADE
+    )
+
+    def __repr__(self) -> str:
+        return "RoomTag <{}>".format(self.id)
+
+    __str__ = __repr__
+
+
