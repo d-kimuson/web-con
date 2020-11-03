@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load render_bundle from webpack_loader %}
+
+{% block title %}Call{% endblock %}
+
+{% block content %}
+<section>
+  <h1 class="m-page-title">通話画面: {{ object.title }}</h1>
+
+  <div id="svelte"></div>
+</section>
+{% endblock %}
+
+{% block external_footer %}
+{% render_bundle 'call' 'js' %}
+{% endblock %}

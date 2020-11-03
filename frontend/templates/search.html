@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load render_bundle from webpack_loader %}
+
+{% block title %}Search{% endblock %}
+
+{% block content %}
+<section>
+  <h1 class="m-page-title">This is Search Page!</h1>
+
+  <ul>
+    {% for room in object_list %}
+    <li>
+      <a href="{% url 'web_con:call' room.pk %}">{{ room.title }}</a>
+    </li>
+    {% endfor %}
+  </ul>
+</section>
+{% endblock %}
+
+{% block external_footer %}
+{% render_bundle 'index' 'js' %}
+{% endblock %}

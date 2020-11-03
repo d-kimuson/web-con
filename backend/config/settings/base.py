@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 
 import os
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 SECRET_KEY = os.environ.get('SECRET_KEY', '')
 
@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'webpack_loader',
     'accounts.apps.AccountsConfig',
-    'web-con.apps.WebConConfig',
+    'web_con.apps.WebConConfig',
 ]
 
 ROOT_URLCONF = 'config.urls'
@@ -55,8 +55,6 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
-
-ROOT_URLCONF = 'config.urls'
 
 TEMPLATES = [
     {
@@ -86,7 +84,7 @@ AUTH_USER_MODEL = 'accounts.User'
 # All Auth
 SITE_ID = 1
 # SOCIALACCOUNT_PROVIDERS = {}
-ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_USER_MODEL_USERNAME_FIELD: Optional[str] = None
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'

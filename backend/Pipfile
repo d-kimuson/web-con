@@ -10,16 +10,25 @@ django-extensions = "*"
 ipython = "*"
 mypy = "*"
 flake8 = "*"
+mypyls = {file = "https://github.com/matangover/mypyls/archive/master.zip"}
+pytest = "*"
+pytest-django = "*"
 
 [packages]
 django = "*"
 django-webpack-loader = "*"
 django-allauth = "*"
+mysqlclient = "*"
+python-dotenv = "*"
 
 [requires]
 python_version = "3.8"
 
 [scripts]
-start = "python manage.py runserver"
-setup = "bash -c 'pipenv install --dev && cp .env.sample .env && python manage.py migrate'"
-check = "bash -c 'python manage.py check && flake8 . && mypy .'"
+start   = "python manage.py runserver"
+setup   = "bash -c 'if [ ! -f ./.env ]; then cp .env.sample .env; fi'"
+sync    = "bash -c 'pipenv install --dev && python manage.py migrate && python manage.py loaddata ./fixtures/dev_min.json'"
+check   = "bash -c 'python manage.py check && flake8 .'"
+test    = "py.test"
+dump_db = "bash -c 'python manage.py dumpdata accounts web_con > ./fixtures/tmp.json'"
+load_db = "python manage.py loaddata"

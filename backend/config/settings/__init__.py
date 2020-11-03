@@ -1,4 +1,7 @@
 import os
+from dotenv import load_dotenv
+
+load_dotenv(verbose=True)  # pipenv外から実行したときにも `.env` を読み込むため
 
 DEBUG = os.environ.get('DEBUG', 'true') == 'true'
 

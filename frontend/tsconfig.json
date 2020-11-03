@@ -1,4 +1,5 @@
 {
+  "extends": "@tsconfig/svelte/tsconfig.json",
   "compilerOptions": {
     "target": "es2017",
     "module": "esnext",
@@ -24,6 +25,9 @@
     },
     "strict": true,
   },
+  "files": [
+    "./static/@types/globals.d.ts"
+  ],
   "include": [
     "./static/**/*",
   ],

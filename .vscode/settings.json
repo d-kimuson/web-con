@@ -5,8 +5,11 @@
     "editor.tabSize": 4
   },
   "python.languageServer": "Pylance",
-  "python.venvPath": "${workspaceFolder}/backend/.venv",
-  "python.pythonPath": "${workspaceFolder}/backend/.venv/bin/python",
+  "python.venvPath": "backend/.venv",
+  "python.pythonPath": "backend/.venv/bin/python",
+  "python.analysis.extraPaths": [
+    "backend"
+  ],
   "python.terminal.activateEnvironment": true,
   "python.formatting.provider": "autopep8",
   "python.linting.flake8Enabled": true,
@@ -14,6 +17,21 @@
     "--config=backend/.flake8",
     "--exclude config/settings",  // .flake8 の設定が適用されないので止む無く
   ],
+  "python.analysis.typeCheckingMode": "off",
+  "python.linting.mypyEnabled": false,
+  // ⇓ メンバーの絶対パスを入力する ⇓
+  "mypy.executable": "/path/to/web-con/backend/.venv/bin/mypyls",
+  "mypy.configFile": "./backend/mypy.ini",
+  "mypy.targets": [
+    "./backend",
+  ],
+  "python.testing.unittestEnabled": false,
+  "python.testing.nosetestsEnabled": false,
+  "python.testing.pytestEnabled": true,
+  "python.testing.pytestArgs": [
+    "backend"
+  ],
+  "python.testing.pytestPath": "${workspaceFolder}/backend/.venv/bin/pytest",
   // TypeScript & JavaScript
   // ESLint
   "eslint.workingDirectories": [
@@ -30,6 +48,9 @@
   // Stylelint
   "stylelint.enable": true,
   "stylelint.configBasedir": "frontend",
+  "stylelint.configOverrides": {
+    "ignoreFiles": ["**/*.js", "**/*.ts", "**/*.svelte"]
+  },
   // Lint On Save
   "editor.formatOnSave": false,
   "editor.codeActionsOnSave": {

@@ -1,4 +1,6 @@
 module.exports = {
+  // svelte 内の typescript サポートがまだされてないので、現状では使わない
+  // https://github.com/sveltejs/eslint-plugin-svelte3/issues/68
   root: true,
   parser: "@typescript-eslint/parser",
   parserOptions: {
