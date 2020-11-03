@@ -10,7 +10,13 @@
   <ul>
     {% for room in object_list %}
     <li>
-      <a href="{% url 'web_con:call' room.pk %}">{{ room.title }}</a>
+      <a href="{% url 'web_con:call' room.pk %}">
+        {% for roomtag in room.roomtag.all %}
+          <div>
+            {{ roomtag.tag.name }}
+          </div>
+        {% endfor %}
+      </a>
     </li>
     {% endfor %}
   </ul>

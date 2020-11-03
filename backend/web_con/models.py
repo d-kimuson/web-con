@@ -65,11 +65,12 @@ class RoomTag(models.Model):
     )
     room = models.ForeignKey(
         Room,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
+        related_name='roomtag',
     )
     tag = models.ForeignKey(
         Tag,
-        on_delete=models.CASCADE
+        on_delete=models.CASCADE,
     )
 
     def __repr__(self) -> str:
