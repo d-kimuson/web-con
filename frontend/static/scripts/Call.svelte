@@ -1,6 +1,6 @@
 <script lang="ts">
   import Peer, { SfuRoom } from "skyway-js"
-  import AsyncVideo from "@scripts/components/AsyncStreamVideo.svelte"
+  import AsyncStreamVideo from "@scripts/components/AsyncStreamVideo.svelte"
   import StreamVideo from "@scripts/components/StreamVideo.svelte"
   import Chat from "@scripts/components/Chat.svelte"
 
@@ -18,7 +18,7 @@
   let localStream = getLocalStream()
   let room: SfuRoom
 
-  let localStreamElement: StreamVideo
+  let localStreamElement: AsyncStreamVideo
   let chatElement: Chat
 
   interface RoomMember {
@@ -30,6 +30,7 @@
   }
 
   let roomMembers: RoomMember[] = []
+  let isJoin = false
 
   // Functions
   async function getLocalStream(): Promise<MediaStream | null> {
@@ -56,6 +57,8 @@
       return
     }
 
+    isJoin = true
+
     room = peer.joinRoom<SfuRoom>(roomId, {
       mode: roomMode,
       stream: actualLocalStream,
@@ -71,16 +74,22 @@
     })
 
     room.on(`stream`, async (stream) => {
-      roomMembers = [
-        ...roomMembers,
-        {
-          name: `名無しくん`,
-          userId: `xxx`,
-          peerId: stream.peerId,
-          stream: stream,
-          video: null,
-        },
-      ]
+      const member = getMember(stream.peerId)
+
+      if (member) {
+        member.stream = stream
+      } else {
+        roomMembers = [
+          ...roomMembers,
+          {
+            name: `名無しくん`,
+            userId: `xxx`,
+            peerId: stream.peerId,
+            stream: stream,
+            video: null,
+          },
+        ]
+      }
     })
 
     room.on(`data`, ({ data, src }) => {
@@ -100,26 +109,31 @@
     })
 
     room.on(`peerLeave`, (peerId) => {
+      console.log("peerLeave is called")
       const member = getMember(peerId)
-      member?.video?.remove()
-      member?.name
+      if (member?.video && member?.video !== null) {
+        console.log("null: ", member.video)
+        member.video.remove()
+      }
       roomMembers = roomMembers.filter((member) => member.peerId !== peerId)
 
       chatElement.writeLog(`${member ? member.name : peerId} が退出しました`)
     })
 
     room.once(`close`, () => {
-      localStreamElement.remove()
-      chatElement.writeLog(`退出中です`)
+      chatElement.writeLog(`退出しました`)
 
       roomMembers.forEach((roomMember) => {
         roomMember.video?.remove()
       })
+
+
+      window.location.href = `/completed_call`
     })
   }
 
   function leave() {
-    room.close(), { once: true }
+    room.close()
   }
 
   function getMember(id: string): RoomMember | undefined {
@@ -143,16 +157,23 @@
 <div>
   <div class="room">
     <div>
-      <button on:click={join}>参加する</button>
-      <button on:click={leave}>一次退席する</button>
+      {#if !isJoin}
+        <button on:click={join}>参加する</button>
+      {:else}<button on:click={leave}>退席する</button>{/if}
     </div>
 
     <div class="videos-container">
       <div class="local-video-container">
-        <AsyncVideo videoSrc={localStream} isMute={true} />
+        <AsyncStreamVideo
+          videoSrc={localStream}
+          isMute={true}
+          bind:this={localStreamElement} />
       </div>
       {#each roomMembers as roomMember, index}
-        <StreamVideo videoSrc={roomMember.stream} isMute={true} />
+        <StreamVideo
+          videoSrc={roomMember.stream}
+          isMute={true}
+          bind:this={roomMembers[index].video} />
       {/each}
     </div>
 

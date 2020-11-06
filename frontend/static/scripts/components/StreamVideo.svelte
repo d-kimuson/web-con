@@ -23,7 +23,6 @@
     await stop()
     if (videoSrc !== null) {
       videoElement.srcObject = null
-      videoElement.remove()
     }
   }
 

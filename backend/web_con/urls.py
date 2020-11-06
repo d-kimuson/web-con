@@ -9,4 +9,5 @@ urlpatterns = [
     path('search', views.SearchView.as_view(), name='search'),
     path('call/<str:pk>', views.CallView.as_view(), name='call'),
     path('room_not_found', views.room_not_found, name='room_not_found'),
+    path('completed_call', views.completed_call, name='completed_call'),
 ]

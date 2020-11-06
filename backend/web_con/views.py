@@ -19,6 +19,10 @@ def room_not_found(request: HttpRequest) -> HttpResponse:
     return render(request, 'room_not_found.html', {})
 
 
+def completed_call(request: HttpRequest) -> HttpResponse:
+    return render(request, 'completed_call.html', {})
+
+
 class SearchView(DebugContextMixin, ListView):
     template_name = 'search.html'
     model = Room

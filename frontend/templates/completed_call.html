@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load render_bundle from webpack_loader %}
+
+{% block title %}通話終了{% endblock %}
+
+{% block content %}
+<section>
+  <h1 class="m-page-title">お疲れさまでした</h1>
+
+  <a href="/">TOPへ戻る</a>
+</section>
+{% endblock %}
+
+{% block external_footer %}
+{% render_bundle 'call' 'js' %}
+{% endblock %}
