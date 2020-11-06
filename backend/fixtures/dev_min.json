@@ -16,7 +16,8 @@
     "model": "web_con.room",
     "pk": "305acb21-ab14-4e4d-8634-797b7f8cc494",
     "fields": {
-      "title": "大学生集まれー！"
+      "title": "大学生集まれー！",
+      "description": ""
     }
   }
 ]

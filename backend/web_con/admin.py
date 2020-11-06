@@ -4,7 +4,7 @@ from .models import Room
 
 
 class RoomAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'title')
+    list_display = ('pk', 'title','description')
     list_filter = ('title', )
 
 
