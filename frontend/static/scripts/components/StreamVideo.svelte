@@ -73,6 +73,7 @@
 </style>
 
 <div class="video-wrapper">
+  <!-- svelte-ignore a11y-media-has-caption -->
   <video bind:this={videoElement} />
   {#if isMenu}
     <div class="menu-container">
