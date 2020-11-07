@@ -1,21 +1,21 @@
-{% extends "account/base.html" %}
+{% extends "base.html" %}
 
-{% load i18n %}
-
-{% block head_title %}{% trans "Sign Out" %}{% endblock %}
+{% load render_bundle from webpack_loader %}
+{% block title %}Logout{% endblock %}
 
 {% block content %}
-<h1>{% trans "Sign Out" %}</h1>
+<section>
+  <h1>サインアウト</h1>
 
-<p>{% trans 'Are you sure you want to sign out?' %}</p>
+  <p>本当にサインアウトしますか?</p>
 
-<form method="post" action="{% url 'account_logout' %}">
-  {% csrf_token %}
-  {% if redirect_field_value %}
-  <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
-  {% endif %}
-  <button type="submit">{% trans 'Sign Out' %}</button>
-</form>
-
+  <form method="post" action="{% url 'account_logout' %}">
+    {% csrf_token %}
+    {% if redirect_field_value %}
+    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+    {% endif %}
+    <button type="submit">サインアウト</button>
+  </form>
+</section>
 
 {% endblock %}

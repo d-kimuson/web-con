@@ -80,6 +80,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 AUTH_USER_MODEL = 'accounts.User'
+LOGIN_REDIRECT_URL = "/"
 
 # All Auth
 SITE_ID = 1
