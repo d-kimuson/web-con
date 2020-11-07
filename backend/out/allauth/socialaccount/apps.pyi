@@ -1,0 +1,6 @@
+from django.apps import AppConfig
+from typing import Any
+
+class SocialAccountConfig(AppConfig):
+    name: str = ...
+    verbose_name: Any = ...
