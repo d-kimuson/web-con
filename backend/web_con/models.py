@@ -20,7 +20,6 @@ class Room(models.Model):
     title = models.CharField(max_length=127)
     description = models.TextField(default='')
 
-
     def check_permission(self, user: Union[AbstractBaseUser, AnonymousUser]) -> bool:
         """ユーザーに対してアクセス権があるかを確認する関数
 

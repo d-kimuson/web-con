@@ -10,4 +10,5 @@ exclude =
     __pycache__,
     config/settings,
     migrations,
+    */tests,
 max-line-length = 120
