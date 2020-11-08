@@ -16,7 +16,7 @@ function check() {
 ./backend/.venv/bin/mypy --config-file ./backend/mypy.ini ./backend; check "mypy"
 cd backend
 ./.venv/bin/python manage.py check; check "Django"
-autopep8 -i ./**/*.py
+./.venv/bin/autopep8 -i ./**/*.py
 ./.venv/bin/flake8 .; check "flake8"
 
 # frontend checks
