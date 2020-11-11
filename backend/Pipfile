@@ -13,6 +13,7 @@ flake8 = "*"
 mypyls = {file = "https://github.com/matangover/mypyls/archive/master.zip"}
 pytest = "*"
 pytest-django = "*"
+djangorestframework-stubs = "*"
 
 [packages]
 django = "*"
@@ -20,6 +21,7 @@ django-webpack-loader = "*"
 django-allauth = "*"
 mysqlclient = "*"
 python-dotenv = "*"
+djangorestframework = "==3.11"
 
 [requires]
 python_version = "3.8"
