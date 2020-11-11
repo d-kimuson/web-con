@@ -5,6 +5,8 @@ from datetime import datetime
 import uuid
 from typing import Union
 
+from accounts.models import User
+
 
 class Room(models.Model):
     """
@@ -19,6 +21,9 @@ class Room(models.Model):
     )
     title = models.CharField(max_length=127)
     description = models.TextField(default='')
+    start_datetime = models.DateTimeField(verbose_name='開始時間')
+    end_datetime = models.DateTimeField(verbose_name='終了時間')
+    is_possible_join = models.BooleanField(default=True, verbose_name='募集中')
 
     def check_permission(self, user: Union[AbstractBaseUser, AnonymousUser]) -> bool:
         """ユーザーに対してアクセス権があるかを確認する関数
@@ -78,3 +83,16 @@ class RoomTag(models.Model):
         return "RoomTag <{}>".format(self.id)
 
     __str__ = __repr__
+
+
+class RoomUser(models.Model):
+    id = models.UUIDField(
+        default=uuid.uuid4,
+        primary_key=True,
+        editable=False
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,  # userの削除をどうするか
+        related_name='roomuser',
+    )
