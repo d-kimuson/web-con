@@ -93,6 +93,6 @@ class RoomUser(models.Model):
     )
     user = models.ForeignKey(
         User,
-        on_delete=models.CASCADE,# userの削除をどうするか
+        on_delete=models.CASCADE,  # userの削除をどうするか
         related_name='roomuser',
     )
