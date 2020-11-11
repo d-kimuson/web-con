@@ -42,7 +42,7 @@ class Room(models.Model):
         return True
 
     def __repr__(self) -> str:
-        return "Room <{}>".format(self.id)
+        return "Room <{}>".format(self.title)
 
     __str__ = __repr__
 
@@ -58,7 +58,7 @@ class Tag(models.Model):
         unique=True)
 
     def __repr__(self) -> str:
-        return "Tag <{}>".format(self.id)
+        return "Tag <{}>".format(self.name)
 
     __str__ = __repr__
 
@@ -95,4 +95,10 @@ class RoomUser(models.Model):
         User,
         on_delete=models.CASCADE,  # userの削除をどうするか
         related_name='roomuser',
+    )
+    room = models.ForeignKey(
+        Room,
+        on_delete=models.CASCADE,
+        related_name='roomuser',
+        null=True,
     )

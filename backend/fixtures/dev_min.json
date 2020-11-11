@@ -17,7 +17,46 @@
     "pk": "305acb21-ab14-4e4d-8634-797b7f8cc494",
     "fields": {
       "title": "大学生集まれー！",
-      "description": ""
+      "description": "大学生あつまり",
+      "start_datetime": "2020-11-11T14:58:10Z",
+      "end_datetime": "2020-11-11T14:58:10Z",
+      "is_possible_join": true
+    }
+  },
+  {
+    "model": "web_con.room",
+    "pk": "7fde35e2-3eb8-43a5-bc08-990ee06664f1",
+    "fields": {
+      "title": "男子大学生集合！",
+      "description": "男子大学生の界隈",
+      "start_datetime": "2020-11-11T16:21:28Z",
+      "end_datetime": "2020-11-11T16:21:29Z",
+      "is_possible_join": true
+    }
+  },
+  {
+    "model": "web_con.room",
+    "pk": "d370da94-dd44-41d2-ae8b-98585078a552",
+    "fields": {
+      "title": "中学生あつまれ",
+      "description": "中学生のあつまり",
+      "start_datetime": "2020-11-11T15:23:51Z",
+      "end_datetime": "2020-11-11T15:23:52Z",
+      "is_possible_join": false
+    }
+  },
+  {
+    "model": "web_con.tag",
+    "pk": "0f543a64-2bf7-4bee-ab75-6d782fd017ed",
+    "fields": {
+      "name": "出会い目的only"
+    }
+  },
+  {
+    "model": "web_con.tag",
+    "pk": "3a29c349-42de-4c0e-a7ac-3389de030349",
+    "fields": {
+      "name": "中学生"
     }
   },
   {
@@ -28,11 +67,63 @@
     }
   },
   {
+    "model": "web_con.tag",
+    "pk": "8e4250dd-e230-4313-8288-80a18b7fbb3b",
+    "fields": {
+      "name": "20代"
+    }
+  },
+  {
+    "model": "web_con.tag",
+    "pk": "bc7daded-48e7-446e-bda1-72cc18b0651f",
+    "fields": {
+      "name": "顔ださない"
+    }
+  },
+  {
+    "model": "web_con.tag",
+    "pk": "e6df2f3b-d5e7-4be9-894a-11322ddad638",
+    "fields": {
+      "name": "女性だけ"
+    }
+  },
+  {
+    "model": "web_con.tag",
+    "pk": "fc2152c5-b59c-4ba3-8c84-ed425b3b1411",
+    "fields": {
+      "name": "男性だけ"
+    }
+  },
+  {
+    "model": "web_con.roomtag",
+    "pk": "2d3c5353-1753-45b2-80d1-9ec5d523cc6a",
+    "fields": {
+      "room": "7fde35e2-3eb8-43a5-bc08-990ee06664f1",
+      "tag": "fc2152c5-b59c-4ba3-8c84-ed425b3b1411"
+    }
+  },
+  {
+    "model": "web_con.roomtag",
+    "pk": "755135fc-011b-4ba9-9d4c-9e086af08689",
+    "fields": {
+      "room": "d370da94-dd44-41d2-ae8b-98585078a552",
+      "tag": "3a29c349-42de-4c0e-a7ac-3389de030349"
+    }
+  },
+  {
     "model": "web_con.roomtag",
     "pk": "8046b075-2584-4ccf-99d3-7db3a7c87fbc",
     "fields": {
       "room": "305acb21-ab14-4e4d-8634-797b7f8cc494",
       "tag": "7e420b08-7e2b-444a-8880-3002eb3e7ac9"
+    }
+  },
+  {
+    "model": "web_con.roomtag",
+    "pk": "cbdc4670-71da-4795-9cd7-ec4f077a160f",
+    "fields": {
+      "room": "305acb21-ab14-4e4d-8634-797b7f8cc494",
+      "tag": "fc2152c5-b59c-4ba3-8c84-ed425b3b1411"
     }
   }
 ]
