@@ -4,6 +4,7 @@
   // Component Props
   export let videoSrc: Promise<MediaStream | null>
   export let isMute: boolean = false
+  export let isLocal: boolean = false
 
   // Local Variables
   let videoElement: StreamVideo
@@ -26,7 +27,7 @@
   {#await videoSrc}
     <div>Loading...</div>
   {:then value}
-    <StreamVideo isMute={isMute} videoSrc={value} bind:this={videoElement} />
+    <StreamVideo {isMute} {isLocal} videoSrc={value} bind:this={videoElement} />
   {:catch error}
     <p>{error.message}</p>
   {/await}

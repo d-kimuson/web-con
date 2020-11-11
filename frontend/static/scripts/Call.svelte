@@ -127,7 +127,6 @@
         roomMember.video?.remove()
       })
 
-
       window.location.href = `/completed_call`
     })
   }
@@ -165,6 +164,7 @@
     <div class="videos-container">
       <div class="local-video-container">
         <AsyncStreamVideo
+          isLocal={true}
           videoSrc={localStream}
           isMute={true}
           bind:this={localStreamElement} />
@@ -172,6 +172,7 @@
       {#each roomMembers as roomMember, index}
         <StreamVideo
           videoSrc={roomMember.stream}
+          isLocal={false}
           isMute={true}
           bind:this={roomMembers[index].video} />
       {/each}

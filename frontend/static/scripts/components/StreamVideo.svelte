@@ -5,7 +5,8 @@
   export let videoSrc: MediaStream | null
   export let isMute: boolean = false
   export let isVideoOn: boolean = false
-  export const isMenu: boolean = true
+  export let isMenu: boolean = true
+  export let isLocal: boolean = false
 
   // Local Variables
   let videoElement: HTMLVideoElement
@@ -74,7 +75,7 @@
 
 <div class="video-wrapper">
   <!-- svelte-ignore a11y-media-has-caption -->
-  <video bind:this={videoElement} />
+  <video muted={isLocal} bind:this={videoElement} />
   {#if isMenu}
     <div class="menu-container">
       <!-- いずれアイコン等でわかりやすく、とりあえず機能だけ -->
