@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Room
+from .models import Room, RoomTag, Tag
 
 
 class RoomAdmin(admin.ModelAdmin):
@@ -10,6 +10,8 @@ class RoomAdmin(admin.ModelAdmin):
 
 targets = (
     (Room, RoomAdmin),
+    (RoomTag, None),
+    (Tag, None),
 )
 
 for target in targets:

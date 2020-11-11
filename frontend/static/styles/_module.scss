@@ -1,9 +1,22 @@
 @use "variable" as var;
 
+.search-body {
+  display: flex;
+  justify-content: space-around;
+}
 .m-page-title {
   font-size: 1.8rem;
 }
 
+.detailed-search:not(:root) {
+  margin-block-start: 1em;
+  padding-block-end: 1em;
+  background-color: #707070;
+}
+
+.detail-text {
+  margin-block-start: 1em;
+}
 .m-theme-bg {
   background: var.$theme-color;
   color: var.$theme-reverse-color;
