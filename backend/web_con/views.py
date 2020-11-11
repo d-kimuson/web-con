@@ -1,5 +1,6 @@
 # from django.http import request
 from django.http.response import Http404
+from rest_framework import viewsets
 from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse
 # from django.utils.timezone import activate
@@ -12,6 +13,7 @@ from functools import reduce
 
 from util.views import DebugContextMixin
 from .models import Room, Tag
+from .serializers import RoomSerializer
 
 
 def index(request: HttpRequest) -> HttpResponse:
@@ -75,3 +77,8 @@ class CallView(DebugContextMixin, DetailView):
                 return redirect(to='web_con:index')
         else:
             raise TypeError
+
+
+class RoomApiViewSet(viewsets.ModelViewSet):
+    queryset = Room.objects.all()
+    serializer_class = RoomSerializer
