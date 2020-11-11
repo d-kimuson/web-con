@@ -1,6 +1,10 @@
 {% extends 'base.html' %}
 {% load render_bundle from webpack_loader %}
 
+{% block external_header %}
+{% render_bundle 'search' 'css' %}
+{% endblock %}
+
 {% block title %}Search{% endblock %}
 
 {% block content %}
@@ -33,5 +37,5 @@
 {% endblock %}
 
 {% block external_footer %}
-{% render_bundle 'index' 'js' %}
+{% render_bundle 'search' 'js' %}
 {% endblock %}
