@@ -41,6 +41,7 @@ class Room(models.Model):
 
     __str__ = __repr__
 
+
 class Tag(models.Model):
     id = models.UUIDField(
         default=uuid.uuid4,
@@ -55,6 +56,7 @@ class Tag(models.Model):
         return "Tag <{}>".format(self.id)
 
     __str__ = __repr__
+
 
 class RoomTag(models.Model):
     id = models.UUIDField(
@@ -76,5 +78,3 @@ class RoomTag(models.Model):
         return "RoomTag <{}>".format(self.id)
 
     __str__ = __repr__
-
-
