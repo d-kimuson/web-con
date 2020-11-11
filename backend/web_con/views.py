@@ -1,8 +1,8 @@
-from django.http import request
+# from django.http import request
 from django.http.response import Http404
 from django.shortcuts import render, redirect
 from django.http import HttpRequest, HttpResponse
-from django.utils.timezone import activate
+# from django.utils.timezone import activate
 from django.views.generic import DetailView, ListView
 from django.db.models import Model, Q
 from django.db.models.query import QuerySet
@@ -33,11 +33,11 @@ class SearchView(DebugContextMixin, ListView):
 
     def get_queryset(self) -> QuerySet[Model]:
         search_all = super().get_queryset()
-        search_title = self.request.GET.get('keyword','')
+        search_title = self.request.GET.get('keyword', '')
         tag_list = [key.replace('tag_', '') for key in self.request.GET.keys() if 'tag_' in key]
         self.request.session.update({
             'activate_tag_list': tag_list,
-            'activate_search':search_title,
+            'activate_search': search_title,
         })
         search_all = search_all.filter(
             reduce(lambda s, t: s | Q(roomtag__tag__pk=t), tag_list, Q(title__icontains=search_title)),
@@ -48,8 +48,8 @@ class SearchView(DebugContextMixin, ListView):
         context_data = super().get_context_data(**kwargs)
         context_data.update({
             'tag_list': Tag.objects.all(),
-            'activate_tag_list':self.request.session['activate_tag_list'],
-            'activate_search':self.request.session['activate_search']
+            'activate_tag_list': self.request.session['activate_tag_list'],
+            'activate_search': self.request.session['activate_search']
         })
         return context_data
 
