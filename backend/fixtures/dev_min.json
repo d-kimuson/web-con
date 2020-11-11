@@ -3,7 +3,7 @@
     "model": "accounts.user",
     "pk": "fec67ca0-141b-4301-901d-7e1de5e95818",
     "fields": {
-      "last_login": "2020-11-01T03:05:18.762Z",
+      "last_login": "2020-11-03T02:51:44.902Z",
       "email": "admin@example.com",
       "password": "pbkdf2_sha256$216000$gmz0AmP7UoHf$/Jg5M7//jt0wUzxrUdBu3K8DlMVTtar4Yr2M7KoRtuQ=",
       "is_staff": true,
@@ -18,6 +18,21 @@
     "fields": {
       "title": "大学生集まれー！",
       "description": ""
+    }
+  },
+  {
+    "model": "web_con.tag",
+    "pk": "7e420b08-7e2b-444a-8880-3002eb3e7ac9",
+    "fields": {
+      "name": "大学生"
+    }
+  },
+  {
+    "model": "web_con.roomtag",
+    "pk": "8046b075-2584-4ccf-99d3-7db3a7c87fbc",
+    "fields": {
+      "room": "305acb21-ab14-4e4d-8634-797b7f8cc494",
+      "tag": "7e420b08-7e2b-444a-8880-3002eb3e7ac9"
     }
   }
 ]
