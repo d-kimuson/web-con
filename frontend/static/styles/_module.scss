@@ -8,9 +8,10 @@
   font-size: 1.8rem;
 }
 
-.detailed-search {
+.detailed-search:not(:root) {
   margin-block-start: 1em;
-  // background-color: 707070;
+  padding-block-end: 1em;
+  background-color: #707070;
 }
 
 .detail-text {
