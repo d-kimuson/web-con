@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models.query import QuerySet
 from django.contrib.auth.models import AbstractBaseUser, AnonymousUser
 from django.utils import timezone
 from datetime import datetime
@@ -35,15 +36,20 @@ class Room(models.Model):
         Returns:
             bool: 権限の有無
         """
+
+        # 権限なしの理由メッセージ(時間外、参加メンバーでない)がわかったほうが良さそう
         return self._check_permission(user, timezone.now())
 
     def _check_permission(self, user: Union[AbstractBaseUser, AnonymousUser], now: datetime) -> bool:
-        # 仮実装で全部True
-        # 実際は部屋の属性とアクセスユーザー情報を比較して権限の有無を確認する
-        return True
+        room_users: 'QuerySet[RoomUser]' = self.roomuser
+        return (
+            self.start_datetime < now < self.end_datetime
+        ) and (
+            room_users.filter(user=user).exists()
+        )
 
     def __repr__(self) -> str:
-        return "Room <{}>".format(self.title)
+        return "Room <{}>".format(self.id)
 
     __str__ = __repr__
 
@@ -59,7 +65,7 @@ class Tag(models.Model):
         unique=True)
 
     def __repr__(self) -> str:
-        return "Tag <{}>".format(self.name)
+        return "Tag <{}>".format(self.id)
 
     __str__ = __repr__
 
