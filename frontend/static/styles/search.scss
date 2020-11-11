@@ -1,0 +1,16 @@
+@use "variable" as var;
+
+.search-body {
+  display: flex;
+  justify-content: space-around;
+}
+
+.detail-text {
+  margin-block-start: 1em;
+}
+
+.detailed-search:not(:root) {
+  margin-block-start: 1em;
+  padding-block-end: 1em;
+  background-color: var.$black-weak;
+}
