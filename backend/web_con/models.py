@@ -9,6 +9,22 @@ from typing import Union
 from accounts.models import User
 
 
+class Tag(models.Model):
+    id = models.UUIDField(
+        default=uuid.uuid4,
+        primary_key=True,
+        editable=False
+    )
+    name = models.CharField(
+        max_length=127,
+        unique=True)
+
+    def __repr__(self) -> str:
+        return "Tag <{}>".format(self.id)
+
+    __str__ = __repr__
+
+
 class Room(models.Model):
     """
     仮実装、とりあえず通話参加用にIDとタイトルだけ持ったモデルを用意しておく
@@ -30,6 +46,14 @@ class Room(models.Model):
     @property
     def is_open(self) -> bool:
         return self._check_time(timezone.now())
+
+    @property
+    def members(self) -> QuerySet[User]:
+        return User.objects.filter(roomuser__room=self)
+
+    @property
+    def tags(self) -> QuerySet[Tag]:
+        return Tag.objects.filter(roomtag__room=self)
 
     def check_permission(self, user: Union[AbstractBaseUser, AnonymousUser]) -> bool:
         """ユーザーに対してアクセス権があるかを確認する関数
@@ -57,22 +81,6 @@ class Room(models.Model):
 
     def __repr__(self) -> str:
         return "Room <{}>".format(self.id)
-
-    __str__ = __repr__
-
-
-class Tag(models.Model):
-    id = models.UUIDField(
-        default=uuid.uuid4,
-        primary_key=True,
-        editable=False
-    )
-    name = models.CharField(
-        max_length=127,
-        unique=True)
-
-    def __repr__(self) -> str:
-        return "Tag <{}>".format(self.id)
 
     __str__ = __repr__
 
