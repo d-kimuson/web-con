@@ -6,14 +6,17 @@ $white: #fafafa !default;
 $white-weak: #eaedf2 !default;
 $green: #64dd17 !default;
 $blue: #4554df !default;
+$pink: #ff91ff !default;
 // specific color
 $text-color: $black !default;
 $link-color: $green !default;
 $success-color: $green !default;
-$theme-color: $blue !default;
-$theme-text-color: #fff;
+$theme-color: $pink !default;
+$theme-strong-color: color.scale($pink, $lightness: -30%);
+$theme-weak-color: color.scale($pink, $lightness: 30%);
+$theme-reverse-color: $white !default;
 // layout
-$header-height: 100px !default;
+$header-height: 70px !default;
 $footer-height: 150px !default;
 // z-index
 // Usage: `@use "sass:map";` & `map.get($z-index-weights, "md")`

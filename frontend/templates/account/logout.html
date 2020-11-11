@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% load render_bundle from webpack_loader %}
+{% block title %}Logout{% endblock %}
+
+{% block content %}
+<section>
+  <h1>サインアウト</h1>
+
+  <p>本当にサインアウトしますか?</p>
+
+  <form method="post" action="{% url 'account_logout' %}">
+    {% csrf_token %}
+    {% if redirect_field_value %}
+    <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+    {% endif %}
+    <button type="submit">サインアウト</button>
+  </form>
+</section>
+
+{% endblock %}

@@ -16,9 +16,17 @@
 <body>
   <div class="l-page-container">
     <header class="l-header m-theme-bg">
-      <a href='/' class="m-remove-a-decoration">
+      <a href='/' class="l-header__title m-flex-center m-remove-a-decoration">
         <h1>Welcome Django App</h1>
       </a>
+
+      <div class="l-header__menu">
+        {% if user.is_authenticated %}
+        <a class="l-header__menu-item m-remove-a-decoration" href="{% url 'account_logout' %}">サインアウト</a>
+        {% else %}
+        <a class="l-header__menu-item m-remove-a-decoration" href="{% url 'account_login' %}">サインイン</a>
+        {% endif %}
+      </div>
     </header>
     <div class="l-content">
       {% block content %}{% endblock %}

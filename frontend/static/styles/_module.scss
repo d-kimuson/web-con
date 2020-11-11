@@ -6,7 +6,6 @@
 }
 .m-page-title {
   font-size: 1.8rem;
-  color: var.$blue;
 }
 
 .detailed-search {
@@ -19,7 +18,13 @@
 }
 .m-theme-bg {
   background: var.$theme-color;
-  color: var.$theme-text-color;
+  color: var.$theme-reverse-color;
+}
+
+.m-flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .m-remove-a-decoration {
