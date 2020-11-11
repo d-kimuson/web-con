@@ -1,34 +1,31 @@
-# from django.http import request
 from django.http.response import Http404
-from rest_framework import viewsets
-from django.shortcuts import render, redirect
+from django.shortcuts import redirect
 from django.http import HttpRequest, HttpResponse
-# from django.utils.timezone import activate
-from django.views.generic import DetailView, ListView
+from django.views.generic import TemplateView, DetailView, ListView
 from django.db.models import Model, Q
 from django.db.models.query import QuerySet
 from django.core.exceptions import ValidationError
 from typing import Dict, Any, Optional
 from functools import reduce
 
-from util.views import DebugContextMixin
+from util.views import ProjectBaseMixin
+from accounts.models import User
 from .models import Room, Tag
-from .serializers import RoomSerializer
 
 
-def index(request: HttpRequest) -> HttpResponse:
-    return render(request, 'index.html', {})
+class IndexView(TemplateView, ProjectBaseMixin):
+    template_name = 'index.html'
 
 
-def room_not_found(request: HttpRequest) -> HttpResponse:
-    return render(request, 'room_not_found.html', {})
+class RoomNotFoundView(ProjectBaseMixin, TemplateView):
+    template_name = 'room_not_found.html'
 
 
-def completed_call(request: HttpRequest) -> HttpResponse:
-    return render(request, 'completed_call.html', {})
+class CallCompoletedView(ProjectBaseMixin, TemplateView):
+    template_name = 'completed_call.html'
 
 
-class SearchView(DebugContextMixin, ListView):
+class SearchView(ProjectBaseMixin, ListView):
     template_name = 'search.html'
     model = Room
     queryset = Room.objects.filter(is_possible_join=True)
@@ -42,7 +39,9 @@ class SearchView(DebugContextMixin, ListView):
             'activate_search': search_title,
         })
         search_all = search_all.filter(
-            reduce(lambda s, t: s | Q(roomtag__tag__pk=t), tag_list, Q(title__icontains=search_title)),
+            reduce(lambda s, t: s | Q(roomtag__tag__pk=t), tag_list, Q(
+                title__icontains=search_title
+            )),
         ).distinct()
         return search_all
 
@@ -56,7 +55,7 @@ class SearchView(DebugContextMixin, ListView):
         return context_data
 
 
-class CallView(DebugContextMixin, DetailView):
+class CallView(ProjectBaseMixin, DetailView):
     template_name = 'call.html'
     model = Room
 
@@ -79,6 +78,19 @@ class CallView(DebugContextMixin, DetailView):
             raise TypeError
 
 
-class RoomApiViewSet(viewsets.ModelViewSet):
-    queryset = Room.objects.all()
-    serializer_class = RoomSerializer
+class UserProfileView(ProjectBaseMixin, DetailView):
+    template_name = 'user_profile.html'
+    model = User
+
+    def dispatch(self, request: HttpRequest, *args: Any, **kwargs: Any) -> HttpResponse:
+        if not request.user.is_authenticated:
+            return redirect(to='web_con:login_required')
+
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'rooms': Room.objects.filter(roomuser__user=self.request.user)  # type: ignore
+        })
+        return context

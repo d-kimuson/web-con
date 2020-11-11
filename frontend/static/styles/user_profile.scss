@@ -1,0 +1,8 @@
+@use "variable" as var;
+
+.is_open.is_open.is_open {
+  color: var.$blue;
+  &::before {
+    content: "[開催中]";
+  }
+}
