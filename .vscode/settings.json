@@ -32,6 +32,7 @@
     "backend"
   ],
   "python.testing.pytestPath": "${workspaceFolder}/backend/.venv/bin/pytest",
+  "autoDocstring.docstringFormat": "google",
   // TypeScript & JavaScript
   // ESLint
   "eslint.workingDirectories": [

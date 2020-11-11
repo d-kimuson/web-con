@@ -8,5 +8,7 @@
     "ms-python.python",
     "ms-python.vscode-pylance",
     "matangover.mypy",
+    "batisteo.vscode-django",
+    "njpwerner.autodocstring",
   ]
 }
