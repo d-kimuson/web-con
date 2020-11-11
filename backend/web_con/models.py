@@ -27,6 +27,10 @@ class Room(models.Model):
     end_datetime = models.DateTimeField(verbose_name='終了時間')
     is_possible_join = models.BooleanField(default=True, verbose_name='募集中')
 
+    @property
+    def is_open(self) -> bool:
+        return self._check_time(timezone.now())
+
     def check_permission(self, user: Union[AbstractBaseUser, AnonymousUser]) -> bool:
         """ユーザーに対してアクセス権があるかを確認する関数
 
@@ -40,13 +44,16 @@ class Room(models.Model):
         # 権限なしの理由メッセージ(時間外、参加メンバーでない)がわかったほうが良さそう
         return self._check_permission(user, timezone.now())
 
-    def _check_permission(self, user: Union[AbstractBaseUser, AnonymousUser], now: datetime) -> bool:
+    def _check_permission(self, user: Union[AbstractBaseUser, AnonymousUser], time: datetime) -> bool:
         room_users: 'QuerySet[RoomUser]' = self.roomuser
         return (
-            self.start_datetime < now < self.end_datetime
+            self._check_time(time)
         ) and (
             room_users.filter(user=user).exists()
         )
+
+    def _check_time(self, time: datetime) -> bool:
+        return self.start_datetime < time < self.end_datetime
 
     def __repr__(self) -> str:
         return "Room <{}>".format(self.id)
