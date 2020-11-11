@@ -1,6 +1,19 @@
 [
   {
     "model": "accounts.user",
+    "pk": "1877fa3f-8316-4ac6-9c8b-cc4cb86353c6",
+    "fields": {
+      "last_login": null,
+      "email": "basic_user@example.com",
+      "password": "pbkdf2_sha256$216000$hwTV6UCsUk4B$I+Bcpp1QKtgbPUZZYOxN2YTdsgkXMBLy2gRoRvH3MDo=",
+      "is_staff": false,
+      "is_superuser": false,
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "accounts.user",
     "pk": "fec67ca0-141b-4301-901d-7e1de5e95818",
     "fields": {
       "last_login": "2020-11-03T02:51:44.902Z",
@@ -18,6 +31,7 @@
     "fields": {
       "title": "大学生集まれー！",
       "description": "大学生あつまり",
+      "created_by": "1877fa3f-8316-4ac6-9c8b-cc4cb86353c6",
       "start_datetime": "2020-11-11T14:58:10Z",
       "end_datetime": "2020-11-11T14:58:10Z",
       "is_possible_join": true
@@ -29,6 +43,7 @@
     "fields": {
       "title": "男子大学生集合！",
       "description": "男子大学生の界隈",
+      "created_by": "1877fa3f-8316-4ac6-9c8b-cc4cb86353c6",
       "start_datetime": "2020-11-11T16:21:28Z",
       "end_datetime": "2020-11-11T16:21:29Z",
       "is_possible_join": true
@@ -40,6 +55,7 @@
     "fields": {
       "title": "中学生あつまれ",
       "description": "中学生のあつまり",
+      "created_by": "1877fa3f-8316-4ac6-9c8b-cc4cb86353c6",
       "start_datetime": "2020-11-11T15:23:51Z",
       "end_datetime": "2020-11-11T15:23:52Z",
       "is_possible_join": false
@@ -124,6 +140,30 @@
     "fields": {
       "room": "305acb21-ab14-4e4d-8634-797b7f8cc494",
       "tag": "fc2152c5-b59c-4ba3-8c84-ed425b3b1411"
+    }
+  },
+  {
+    "model": "web_con.roomuser",
+    "pk": "1dba0e49-d775-4b73-9d69-597ac7920e68",
+    "fields": {
+      "user": "1877fa3f-8316-4ac6-9c8b-cc4cb86353c6",
+      "room": "305acb21-ab14-4e4d-8634-797b7f8cc494"
+    }
+  },
+  {
+    "model": "web_con.roomuser",
+    "pk": "ef88ac9a-e9ab-452d-8369-62b18b30a8b0",
+    "fields": {
+      "user": "1877fa3f-8316-4ac6-9c8b-cc4cb86353c6",
+      "room": "7fde35e2-3eb8-43a5-bc08-990ee06664f1"
+    }
+  },
+  {
+    "model": "web_con.roomuser",
+    "pk": "fff95531-269b-480a-b1ab-03e5b8e8ec56",
+    "fields": {
+      "user": "1877fa3f-8316-4ac6-9c8b-cc4cb86353c6",
+      "room": "d370da94-dd44-41d2-ae8b-98585078a552"
     }
   }
 ]

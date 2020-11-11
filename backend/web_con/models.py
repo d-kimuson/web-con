@@ -21,6 +21,7 @@ class Room(models.Model):
     )
     title = models.CharField(max_length=127)
     description = models.TextField(default='')
+    created_by = models.ForeignKey(User, on_delete=models.CASCADE, related_name='room_created')
     start_datetime = models.DateTimeField(verbose_name='開始時間')
     end_datetime = models.DateTimeField(verbose_name='終了時間')
     is_possible_join = models.BooleanField(default=True, verbose_name='募集中')
@@ -64,6 +65,11 @@ class Tag(models.Model):
 
 
 class RoomTag(models.Model):
+    class Meta:
+        unique_together = (
+            ('room', 'tag',)
+        )
+
     id = models.UUIDField(
         default=uuid.uuid4,
         primary_key=True,
@@ -80,12 +86,17 @@ class RoomTag(models.Model):
     )
 
     def __repr__(self) -> str:
-        return "RoomTag <{}>".format(self.id)
+        return "RoomTag <{}, {}>".format(self.room.title, self.tag.name)
 
     __str__ = __repr__
 
 
 class RoomUser(models.Model):
+    class Meta:
+        unique_together = (
+            ('user', 'room',),
+        )
+
     id = models.UUIDField(
         default=uuid.uuid4,
         primary_key=True,
@@ -100,5 +111,4 @@ class RoomUser(models.Model):
         Room,
         on_delete=models.CASCADE,
         related_name='roomuser',
-        null=True,
     )
