@@ -15,6 +15,10 @@ class UserAdmin(BaseUserAdmin):
         )}),
     )
 
+    add_fieldsets = (
+        (None, {'fields': ('email', 'password1', 'password2')}),
+    )
+
     list_display = ('pk', 'email', 'is_staff', 'last_login')
     list_filter = ('is_staff', 'is_superuser',)
     search_fields = ('email',)
