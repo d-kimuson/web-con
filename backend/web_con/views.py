@@ -1,16 +1,21 @@
+# from django.http import request
+import uuid
+from django.db import models
 from django.http.response import Http404
 from django.shortcuts import redirect
 from django.http import HttpRequest, HttpResponse
-from django.views.generic import TemplateView, DetailView, ListView
+from django.views.generic import TemplateView, DetailView, ListView, CreateView
 from django.db.models import Model, Q
 from django.db.models.query import QuerySet
 from django.core.exceptions import ValidationError
 from typing import Dict, Any, Optional
 from functools import reduce
+from django.urls import reverse_lazy
 
 from util.views import ProjectBaseMixin
 from accounts.models import User
 from .models import Room, Tag
+from .form import CreateRoomForm
 
 
 class IndexView(TemplateView, ProjectBaseMixin):
@@ -94,3 +99,18 @@ class UserProfileView(ProjectBaseMixin, DetailView):
             'rooms': Room.objects.filter(roomuser__user=self.request.user)  # type: ignore
         })
         return context
+
+
+class SettingRecruitView(ProjectBaseMixin, CreateView):
+    template_name = 'setting_recruit.html'
+    model = Room
+    form_class = CreateRoomForm
+    success_url = reverse_lazy('web_con:search')
+
+    def form_valid(self, form):
+        room = form.save(commit =False)
+        room.id = uuid.uuid4()
+        room.created_by = self.request.user
+        room.is_possible_join = True
+        room.save()
+        return super().form_valid(form)
