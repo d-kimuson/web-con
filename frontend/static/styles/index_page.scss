@@ -1,0 +1,26 @@
+@use "variable" as var;
+
+$-post-button-size: 100px;
+
+.post-button {
+  // outer position
+  position: fixed;
+  top: 30%;
+  left: 80%;
+
+  // inner layout
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  // style
+  height: $-post-button-size;
+  width: $-post-button-size;
+  border-radius: 50%;
+  font-weight: bold;
+
+  &,
+  &:visited {
+    text-decoration: none;
+  }
+}

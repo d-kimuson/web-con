@@ -1,14 +1,32 @@
 {% extends 'base.html' %}
 {% load render_bundle from webpack_loader %}
 
+{% block external_header %}
+{% render_bundle 'index' 'css' %}
+{% endblock %}
+
 {% block title %}Index{% endblock %}
 
 {% block content %}
 <section>
-  <h1 class="m-page-title">This is Index Page!</h1>
+  <h1 class="m-section-title">あなたにオススメ！</h1>
 
   <a href="{% url 'web_con:search' %}">部屋を探す</a>
 </section>
+<section>
+  <h1 class="m-section-title">顔出し不要！気軽に参加できるよ！</h1>
+
+  <a href="{% url 'web_con:search' %}">部屋を探す</a>
+</section>
+<section>
+  <h1 class="m-section-title">待たずに参加できる！締め切りまであと少し！</h1>
+
+  <a href="{% url 'web_con:search' %}">部屋を探す</a>
+</section>
+
+<a class="post-button m-theme-bg m-circle-button" href="#">
+  募集する
+</a>
 {% endblock %}
 
 {% block external_footer %}
