@@ -9,7 +9,6 @@ import datetime
 # from django.contrib.admin.widgets import AdminDateWidget
 
 
-
 class CreateRoomForm(forms.ModelForm):
     dt_now = datetime.datetime.now()
     td = datetime.timedelta(hours=1)
@@ -20,6 +19,7 @@ class CreateRoomForm(forms.ModelForm):
     end_datetime = forms.CharField(widget=forms.TextInput(attrs={
         'placeholder': dt_one_hour_after.strftime('%Y-%m-%d %H:%M:%S')
     }))
+
     class Meta:
         model = Room
         fields = ('title', 'description', 'start_datetime', 'end_datetime')
