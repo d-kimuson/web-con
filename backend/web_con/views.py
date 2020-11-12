@@ -1,6 +1,8 @@
 # from django.http import request
 import uuid
-from django.db import models
+# import django
+# from django.db import models
+from django.forms.models import BaseModelForm
 from django.http.response import Http404
 from django.shortcuts import redirect
 from django.http import HttpRequest, HttpResponse
@@ -11,6 +13,7 @@ from django.core.exceptions import ValidationError
 from typing import Dict, Any, Optional
 from functools import reduce
 from django.urls import reverse_lazy
+# from out.allauth.account import forms
 
 from util.views import ProjectBaseMixin
 from accounts.models import User
@@ -107,8 +110,8 @@ class SettingRecruitView(ProjectBaseMixin, CreateView):
     form_class = CreateRoomForm
     success_url = reverse_lazy('web_con:search')
 
-    def form_valid(self, form):
-        room = form.save(commit =False)
+    def form_valid(self, form: BaseModelForm) -> HttpResponse:
+        room = form.save(commit=False)
         room.id = uuid.uuid4()
         room.created_by = self.request.user
         room.is_possible_join = True

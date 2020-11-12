@@ -10,5 +10,6 @@ urlpatterns = [
     path('call/<str:pk>', views.CallView.as_view(), name='call'),
     path('room_not_found', views.RoomNotFoundView.as_view(), name='room_not_found'),
     path('completed_call', views.CallCompoletedView.as_view(), name='completed_call'),
-    path('user/<str:pk>', views.UserProfileView.as_view(), name='user_profile')
+    path('user/<str:pk>', views.UserProfileView.as_view(), name='user_profile'),
+    path('setting_recruit', views.SettingRecruitView.as_view(), name='setting_recruit')
 ]
