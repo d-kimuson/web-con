@@ -133,3 +133,9 @@ class RoomUser(models.Model):
         on_delete=models.CASCADE,
         related_name='roomuser',
     )
+    peer_id = models.CharField(
+        max_length=127,
+        null=True,
+        blank=True,
+        unique=True,
+    )
