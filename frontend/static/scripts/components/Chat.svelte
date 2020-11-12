@@ -2,12 +2,6 @@
   import type { SfuRoom } from "skyway-js"
   import dayjs from "dayjs"
 
-  interface User {
-    name: string
-    userId: string
-    peerId: string
-  }
-
   interface Chat {
     user: User
     content: string

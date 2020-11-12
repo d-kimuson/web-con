@@ -1,5 +1,6 @@
 <script lang="ts">
   import Peer, { SfuRoom } from "skyway-js"
+  import { joinRoom, roomDetail } from "@scripts/api"
   import AsyncStreamVideo from "@scripts/components/AsyncStreamVideo.svelte"
   import StreamVideo from "@scripts/components/StreamVideo.svelte"
   import Chat from "@scripts/components/Chat.svelte"
@@ -20,6 +21,7 @@
 
   let localStreamElement: AsyncStreamVideo
   let chatElement: Chat
+  let self: User
 
   interface RoomMember {
     name: string
@@ -57,6 +59,20 @@
       return
     }
 
+    // 参加をサーバーに伝える
+    const response = await joinRoom(roomId, peer.id)
+    if (!response) {
+      alert(`参加できませんでした`)
+      return
+    }
+
+    console.log(response)
+
+    self = {
+      name: response.user.email,
+      userId: response.user.pk,
+      peerId: peer.id,
+    }
     isJoin = true
 
     room = peer.joinRoom<SfuRoom>(roomId, {
@@ -69,7 +85,6 @@
 
     room.on(`peerJoin`, (peerId) => {
       const member = getMember(peerId)
-
       chatElement.writeLog(`${member ? member.name : peerId} が参加しました！`)
     })
 
@@ -79,16 +94,22 @@
       if (member) {
         member.stream = stream
       } else {
-        roomMembers = [
-          ...roomMembers,
-          {
-            name: `名無しくん`,
-            userId: `xxx`,
-            peerId: stream.peerId,
-            stream: stream,
-            video: null,
-          },
-        ]
+        const roomUser = (await roomDetail(roomId))
+          ?.room_members
+          .find(roomMember => roomMember.peer_id = stream.peerId)
+
+        if (roomUser) {
+          roomMembers = [
+            ...roomMembers,
+            {
+              name: roomUser.user.email,
+              userId: roomUser.user.pk,
+              peerId: stream.peerId,
+              stream: stream,
+              video: null,
+            },
+          ]
+        }
       }
     })
 
@@ -179,10 +200,7 @@
     </div>
 
     {#if room}
-      <Chat
-        self={{ name: '自分の名前', userId: 'xxx', peerId: peer.id }}
-        {room}
-        bind:this={chatElement} />
+      <Chat {self} {room} bind:this={chatElement} />
     {/if}
   </div>
   <p class="meta" id="js-meta" />
