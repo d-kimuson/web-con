@@ -26,7 +26,6 @@
         <a class="l-header__menu-item m-remove-a-decoration" href="{% url 'web_con:user_profile' user.pk %}">
           {{ user.email }}
         </a>
-        <a class="l-header__menu-item m-remove-a-decoration" href="{% url 'account_logout' %}">サインアウト</a>
         {% else %}
         <a class="l-header__menu-item m-remove-a-decoration" href="{% url 'account_login' %}">サインイン</a>
         {% endif %}
