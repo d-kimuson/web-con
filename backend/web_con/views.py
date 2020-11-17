@@ -17,8 +17,8 @@ from django.urls import reverse_lazy
 
 from util.views import ProjectBaseMixin
 from accounts.models import User
-from .models import Room, Tag
-from .form import CreateRoomForm
+from .models import Room, Tag, RoomTag
+from .form import CreateRoomForm # , CreateRoomTagForm
 
 
 class IndexView(TemplateView, ProjectBaseMixin):
@@ -110,10 +110,22 @@ class SettingRecruitView(ProjectBaseMixin, CreateView):
     form_class = CreateRoomForm
     success_url = reverse_lazy('web_con:search')
 
+
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'tag_list': Tag.objects.all(),
+        })
+        return context
+
     def form_valid(self, form: BaseModelForm) -> HttpResponse:
         room = form.save(commit=False)
         room.id = uuid.uuid4()
         room.created_by = self.request.user
         room.is_possible_join = True
         room.save()
+
+        tag_instans = Tag.objects.all()
+        roomtag.objects.get(tag = tag_instans, room = room)
+        print(self.request.POST)
         return super().form_valid(form)
