@@ -3,7 +3,7 @@
 # from django.forms import fields
 # from django.forms import widgets
 from django.forms.widgets import DateTimeInput
-from .models import Room, Tag
+from .models import Room
 from django import forms
 import datetime
 # from django.contrib.admin.widgets import AdminDateWidget
