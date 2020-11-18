@@ -1,6 +1,8 @@
 <script lang="ts">
   import Peer, { SfuRoom } from "skyway-js"
-  import { joinRoom, roomDetail } from "@scripts/api"
+  import { onMount } from 'svelte'
+
+  import { loginUser, roomDetail } from "@scripts/api"
   import AsyncStreamVideo from "@scripts/components/AsyncStreamVideo.svelte"
   import StreamVideo from "@scripts/components/StreamVideo.svelte"
   import Chat from "@scripts/components/Chat.svelte"
@@ -11,11 +13,9 @@
 
   const url = new URL(location.href)
   const roomId = url.pathname.split(`/`).slice(-1)[0]
-  const peer = new Peer({
-    key: roomKey,
-    debug: 3,
-  })
 
+  let peer: Peer | undefined
+  let user: UserSerializer | undefined
   let localStream = getLocalStream()
   let room: SfuRoom
 
@@ -34,6 +34,27 @@
   let roomMembers: RoomMember[] = []
   let isJoin = false
 
+  // ページロード時
+  onMount(async () => {
+    // ログインユーザー情報の取得
+    const response = await loginUser()
+
+    if (!response) {
+      // TODO: ログインページへの誘導などしたほうが良い
+      alert(`ログイン状態を確認してください`)
+      return
+    }
+
+    user = response
+
+    // 接続用 Peer の準備
+    // TODO: skyway 側で 登録済みユーザー以外の参加を弾く必要がある
+    peer = new Peer(user.pk, {
+      key: roomKey,
+      debug: 3,
+    })
+  })
+
   // Functions
   async function getLocalStream(): Promise<MediaStream | null> {
     return navigator.mediaDevices
@@ -48,29 +69,30 @@
   }
 
   async function join() {
-    if (!peer.open) {
-      alert(`参加準備が整っていません`)
-      return
-    }
-
     const actualLocalStream = await localStream
     if (!actualLocalStream) {
       alert(`カメラとマイクに問題があります`)
       return
     }
 
-    // 参加をサーバーに伝える
-    const response = await joinRoom(roomId, peer.id)
-    if (!response) {
-      alert(`参加できませんでした`)
+    if (!peer) {
+      alert(`参加準備が整っていません`)
       return
     }
 
-    console.log(response)
+    if (!peer.open) {
+      alert(`参加準備が整っていません`)
+      return
+    }
+
+    if (!user) {
+      alert(`ログイン状態を確認してください`)
+      return
+    }
 
     self = {
-      name: response.user.email,
-      userId: response.user.pk,
+      name: user.email,
+      userId: user.pk,
       peerId: peer.id,
     }
     isJoin = true
@@ -94,9 +116,9 @@
       if (member) {
         member.stream = stream
       } else {
-        const roomUser = (await roomDetail(roomId))
-          ?.room_members
-          .find(roomMember => roomMember.peer_id = stream.peerId)
+        const roomUser = (await roomDetail(roomId))?.room_members.find(
+          (roomMember) => (roomMember.peer_id = stream.peerId),
+        )
 
         if (roomUser) {
           roomMembers = [

@@ -15,17 +15,12 @@ interface JoinRoomResponse {
   room: RoomSerializer
 }
 
-export const joinRoom = async (
-  roomId: string,
-  peerId: string,
-): Promise<JoinRoomResponse | undefined> => {
+export const loginUser = async (): Promise<UserSerializer | undefined> => {
   try {
     const response: {
       status: number
-      data: JoinRoomResponse
-    } = await api.post(`/rooms/${roomId}/join/`, {
-      peerId,
-    })
+      data: UserSerializer
+    } = await api.get(`/users/login_user/`)
 
     return response.data
   } catch (error) {
@@ -34,6 +29,27 @@ export const joinRoom = async (
     console.log(`ERROR(${status}): ${statusText}`)
   }
 }
+
+// 使わなくなったので削除予定です
+// export const joinRoom = async (
+//   roomId: string,
+//   peerId: string,
+// ): Promise<JoinRoomResponse | undefined> => {
+//   try {
+//     const response: {
+//       status: number
+//       data: JoinRoomResponse
+//     } = await api.post(`/rooms/${roomId}/join/`, {
+//       peerId,
+//     })
+
+//     return response.data
+//   } catch (error) {
+//     const { status, statusText } = error.response
+
+//     console.log(`ERROR(${status}): ${statusText}`)
+//   }
+// }
 
 export const roomList = async (): Promise<RoomSerializer[] | undefined> => {
   try {
