@@ -53,6 +53,37 @@
       key: roomKey,
       debug: 3,
     })
+
+    const actualLocalStream = await localStream
+
+    // リロード 自動で再接続
+    if (localStorage.getItem(`isJoin`) === `true` &&
+        localStorage.getItem(`currentRoom`) === roomId &&
+        actualLocalStream && user && peer) {
+
+      // peer が開くまで待つ
+      let count = 0
+      const tid = setInterval(async () => {
+        if (count > 5) {
+          // 5秒でタイムアウト
+          clearInterval(tid)
+        }
+
+        if (user && peer && peer.open) {
+          // peer が開いたのを確認して参加する
+
+          clearInterval(tid)
+          try {
+            join({ user, peer, localStream: await actualLocalStream })
+          } catch (error) {
+            console.log(`ERROR`, error)
+          }
+        }
+
+        count++
+        console.log(`${count} 秒たった`)
+      }, 1000)
+    }
   })
 
   // Functions
@@ -68,7 +99,7 @@
       })
   }
 
-  async function join() {
+  async function checkAndJoin() {
     const actualLocalStream = await localStream
     if (!actualLocalStream) {
       alert(`カメラとマイクに問題があります`)
@@ -77,11 +108,13 @@
 
     if (!peer) {
       alert(`参加準備が整っていません`)
+      console.log(`because peer is undefined`)
       return
     }
 
     if (!peer.open) {
       alert(`参加準備が整っていません`)
+      console.log(`because peer is not open`)
       return
     }
 
@@ -90,6 +123,10 @@
       return
     }
 
+    join({user, peer, localStream: actualLocalStream})
+  }
+
+  async function join({ user, peer, localStream }: { user: UserSerializer, peer: Peer, localStream: MediaStream }) {
     self = {
       name: user.email,
       userId: user.pk,
@@ -99,8 +136,11 @@
 
     room = peer.joinRoom<SfuRoom>(roomId, {
       mode: roomMode,
-      stream: actualLocalStream,
+      stream: localStream,
     })
+
+    localStorage.setItem(`isJoin`, `true`)
+    localStorage.setItem(`currentRoom`, roomId)
 
     // イベントハンドリング
     room.once(`open`, () => chatElement.writeLog(`参加しました！`))
@@ -165,6 +205,8 @@
 
     room.once(`close`, () => {
       chatElement.writeLog(`退出しました`)
+      localStorage.setItem(`isJoin`, `false`)
+      localStorage.removeItem(`currentRoom`)
 
       roomMembers.forEach((roomMember) => {
         roomMember.video?.remove()
@@ -200,7 +242,7 @@
   <div class="room">
     <div>
       {#if !isJoin}
-        <button on:click={join}>参加する</button>
+        <button on:click={checkAndJoin}>参加する</button>
       {:else}<button on:click={leave}>退席する</button>{/if}
     </div>
 
