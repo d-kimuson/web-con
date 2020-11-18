@@ -10,6 +10,18 @@ from accounts.serializers import UserSerializer
 from .models import Room
 from .serializers import RoomSerializer
 
+
+class UserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+    @action(methods=['GET'], detail=False, url_path='login_user', permission_classes=(IsAuthenticated,))
+    def login_user(self, request: Request) -> Response:
+        return Response(
+            self.get_serializer(instance=self.request.user).data
+        )
+
+
 class RoomViewSet(viewsets.ModelViewSet):
     queryset = Room.objects.all()
     serializer_class = RoomSerializer

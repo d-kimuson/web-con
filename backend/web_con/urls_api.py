@@ -8,4 +8,5 @@ urlpatterns = []
 
 router = routers.DefaultRouter()
 router.register('rooms', viewsets.RoomViewSet)
+router.register('users', viewsets.UserViewSet)
 urlpatterns += router.urls
