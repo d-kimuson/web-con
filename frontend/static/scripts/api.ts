@@ -1,4 +1,5 @@
 import axios from "axios"
+import dayjs, { Dayjs } from "dayjs"
 
 export const api = axios.create({
   baseURL: `/api/`,
@@ -63,13 +64,24 @@ export const roomList = async (): Promise<RoomSerializer[] | undefined> => {
   }
 }
 
+type RoomDetailResponse = Omit<
+  RoomSerializer,
+  "start_datetime" | "end_datetime"
+> & {
+  start_datetime: Dayjs
+  end_datetime: Dayjs
+}
+
 export const roomDetail = async (
   roomId: string,
-): Promise<RoomSerializer | undefined> => {
+): Promise<RoomDetailResponse | undefined> => {
   try {
     const response: RoomSerializer = await api.get(`/rooms/${roomId}/`)
-
-    return response
+    return {
+      ...response,
+      start_datetime: dayjs(response.start_datetime),
+      end_datetime: dayjs(response.end_datetime),
+    }
   } catch (error) {
     const { status, statusText } = error.response
 
