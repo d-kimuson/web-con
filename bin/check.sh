@@ -21,6 +21,7 @@ cd backend
 
 # frontend checks
 cd ../frontend
+yarn check:all && check "type check"
 yarn lint && check "eslint & stylelint"
 
 cd $PREVIOUS_DIRECTORY
