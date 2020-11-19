@@ -73,7 +73,7 @@
 
           clearInterval(tid)
           try {
-            join({ user, peer, localStream: await actualLocalStream })
+            join({ user, peer, localStream: actualLocalStream })
           } catch (error) {
             console.log(`ERROR`, error)
           }
