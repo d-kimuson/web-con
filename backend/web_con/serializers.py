@@ -16,7 +16,7 @@ class RoomUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = RoomUser
-        fields = ('pk', 'user', 'peer_id',)
+        fields = ('pk', 'user',)
 
     def get_user(self, obj: RoomUser) -> Dict[str, Any]:
         return UserSerializer(instance=obj.user).data

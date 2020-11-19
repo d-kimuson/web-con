@@ -26,7 +26,6 @@
   interface RoomMember {
     name: string
     userId: string
-    peerId: string
     stream: MediaStream
     video: StreamVideo | null
   }
@@ -130,7 +129,6 @@
     self = {
       name: user.email,
       userId: user.pk,
-      peerId: peer.id,
     }
     isJoin = true
 
@@ -157,7 +155,7 @@
         member.stream = stream
       } else {
         const roomUser = (await roomDetail(roomId))?.room_members.find(
-          (roomMember) => (roomMember.peer_id = stream.peerId),
+          (roomMember) => (roomMember.user.pk = stream.peerId),
         )
 
         if (roomUser) {
@@ -166,7 +164,6 @@
             {
               name: roomUser.user.email,
               userId: roomUser.user.pk,
-              peerId: stream.peerId,
               stream: stream,
               video: null,
             },
@@ -183,7 +180,6 @@
         chatElement.reveiveMessage(
           {
             name: member.name,
-            peerId: member.peerId,
             userId: member.userId,
           },
           data,
@@ -198,7 +194,7 @@
         console.log("null: ", member.video)
         member.video.remove()
       }
-      roomMembers = roomMembers.filter((member) => member.peerId !== peerId)
+      roomMembers = roomMembers.filter((member) => member.userId !== peerId)
 
       chatElement.writeLog(`${member ? member.name : peerId} が退出しました`)
     })
@@ -221,7 +217,7 @@
   }
 
   function getMember(id: string): RoomMember | undefined {
-    return roomMembers.find((member) => member.peerId === id)
+    return roomMembers.find((member) => member.userId === id)
   }
 </script>
 

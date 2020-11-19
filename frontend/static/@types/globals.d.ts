@@ -7,7 +7,6 @@ interface HTMLVideoElement {
 interface User {
   name: string
   userId: string
-  peerId: string
 }
 
 // API
@@ -24,7 +23,6 @@ interface TagSerializer {
 interface RoomUserSerializer {
   pk: string
   user: UserSerializer
-  peer_id?: string
 }
 
 interface RoomSerializer {
