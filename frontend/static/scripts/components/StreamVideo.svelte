@@ -1,5 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte"
+  import { isMute as isMuteStore, isVideoOn as isVideoOnStore } from "@scripts/store"
 
   // Component Props
   export let videoSrc: MediaStream | null
@@ -7,6 +8,12 @@
   export let isVideoOn: boolean = false
   export let isMenu: boolean = true
   export let isLocal: boolean = false
+
+  if (isLocal) {
+    // 自分用 SteramVideo は LocalStorage と同期する
+    isMute = isMuteStore.get()
+    isVideoOn = isVideoOnStore.get()
+  }
 
   // Local Variables
   let videoElement: HTMLVideoElement
@@ -38,7 +45,11 @@
     const videoTracks = videoSrc?.getVideoTracks()
 
     if (!videoTracks) return
-    videoTracks[0].enabled = !isVideoOn
+    videoTracks[0].enabled = isVideoOn
+
+    if (isLocal) {
+      isVideoOnStore.set(isVideoOn)
+    }
   }
 
   function onMuteChange() {
@@ -46,6 +57,10 @@
 
     if (!audioTracks) return
     audioTracks[0].enabled = !isMute
+
+    if (isLocal) {
+      isMuteStore.set(isMute)
+    }
   }
 
   // Application
