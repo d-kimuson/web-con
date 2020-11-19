@@ -9,19 +9,16 @@ export const api = axios.create({
   xsrfHeaderName: `X-CSRFTOKEN`,
 })
 
-// API Endpoint Definition
-interface JoinRoomResponse {
-  message: string
-  user: UserSerializer
-  room: RoomSerializer
+interface Response<T> {
+  status: number
+  data: T
 }
 
 export const loginUser = async (): Promise<UserSerializer | undefined> => {
   try {
-    const response: {
-      status: number
-      data: UserSerializer
-    } = await api.get(`/users/login_user/`)
+    const response: Response<UserSerializer> = await api.get(
+      `/users/login_user/`,
+    )
 
     return response.data
   } catch (error) {
@@ -32,6 +29,11 @@ export const loginUser = async (): Promise<UserSerializer | undefined> => {
 }
 
 // 使わなくなったので削除予定です
+// interface JoinRoomResponse {
+//   message: string
+//   user: UserSerializer
+//   room: RoomSerializer
+// }
 // export const joinRoom = async (
 //   roomId: string,
 //   peerId: string,
@@ -54,9 +56,9 @@ export const loginUser = async (): Promise<UserSerializer | undefined> => {
 
 export const roomList = async (): Promise<RoomSerializer[] | undefined> => {
   try {
-    const response: RoomSerializer[] = await api.get(`/rooms/`)
+    const response: Response<RoomSerializer[]> = await api.get(`/rooms/`)
 
-    return response
+    return response.data
   } catch (error) {
     const { status, statusText } = error.response
 
@@ -76,12 +78,16 @@ export const roomDetail = async (
   roomId: string,
 ): Promise<RoomDetailResponse | undefined> => {
   try {
-    const response: RoomSerializer = await api.get(`/rooms/${roomId}/`)
-    return {
-      ...response,
-      start_datetime: dayjs(response.start_datetime),
-      end_datetime: dayjs(response.end_datetime),
+    const response: Response<RoomSerializer> = await api.get(
+      `/rooms/${roomId}/`,
+    )
+    const tmp = {
+      ...response.data,
+      start_datetime: dayjs(response.data.start_datetime),
+      end_datetime: dayjs(response.data.end_datetime),
     }
+
+    return tmp
   } catch (error) {
     const { status, statusText } = error.response
 
