@@ -1,6 +1,7 @@
 <script lang="ts">
   import Peer, { SfuRoom } from "skyway-js"
   import { onMount } from 'svelte'
+  import dayjs from "dayjs"
 
   import { loginUser, roomDetail } from "@scripts/api"
   import AsyncStreamVideo from "@scripts/components/AsyncStreamVideo.svelte"
@@ -31,6 +32,7 @@
   }
 
   let roomMembers: RoomMember[] = []
+  let roomInfo = roomDetail(roomId)
   let isJoin = false
 
   // ページロード時
@@ -154,8 +156,8 @@
       if (member) {
         member.stream = stream
       } else {
-        const roomUser = (await roomDetail(roomId))?.room_members.find(
-          (roomMember) => (roomMember.user.pk = stream.peerId),
+        const roomUser = (await roomInfo)?.room_members.find(
+          (roomMember) => (roomMember.user.pk = stream.peerId)
         )
 
         if (roomUser) {
@@ -208,8 +210,22 @@
         roomMember.video?.remove()
       })
 
-      window.location.href = `/completed_call`
+      moveToCompletePage()
     })
+
+    // 自動退出
+    const now = dayjs()
+    const endTime = (await roomInfo)?.end_datetime
+
+    if (endTime) {
+      // 残り時間によっては、setTimeout の最大時間を超えてしまうので。
+      // とりあえず最大でも5時間を想定する
+      const remainingTime = Math.min(endTime.diff(now), 5 * 60 * 60 * 1000)
+
+      setTimeout(() => {
+        moveToCompletePage()
+      }, remainingTime);
+    }
   }
 
   function leave() {
@@ -218,6 +234,10 @@
 
   function getMember(id: string): RoomMember | undefined {
     return roomMembers.find((member) => member.userId === id)
+  }
+
+  function moveToCompletePage() {
+    window.location.href = `/completed_call`
   }
 </script>
 
