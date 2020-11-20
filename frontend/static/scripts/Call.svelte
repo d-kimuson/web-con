@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Peer, { SfuRoom } from "skyway-js"
-  import { onMount } from 'svelte'
+  import Peer, { SfuRoom, RoomStream } from "skyway-js"
+  import { onMount } from "svelte"
   import dayjs from "dayjs"
 
   import { endpoints } from "@scripts/api"
@@ -27,23 +27,19 @@
   interface RoomMember {
     name: string
     userId: string
-    stream: MediaStream
-    video: StreamVideo | null
+    stream: MediaStream | null
   }
 
   let roomMembers: RoomMember[] = []
-  let roomInfo = endpoints.apiRoomsRetrieve(roomId)
-    .then(response => ({
-      ...response.data,
-      end_datetime: dayjs(response.data.end_datetime),
-      start_datetime: dayjs(response.data.start_datetime),
-    }))
+  let roomInfo = endpoints.apiRoomsRetrieve(roomId).then((response) => ({
+    ...response.data,
+    end_datetime: dayjs(response.data.end_datetime),
+    start_datetime: dayjs(response.data.start_datetime),
+  }))
   let isJoin = false
 
   // ページロード時
   onMount(async () => {
-    // test
-
     const response = await endpoints.apiUsersLoginUserRetrieve()
 
     if (!response.data) {
@@ -64,10 +60,13 @@
     const actualLocalStream = await localStream
 
     // リロード 自動で再接続
-    if (localStorage.getItem(`isJoin`) === `true` &&
-        localStorage.getItem(`currentRoom`) === roomId &&
-        actualLocalStream && user && peer) {
-
+    if (
+      localStorage.getItem(`isJoin`) === `true` &&
+      localStorage.getItem(`currentRoom`) === roomId &&
+      actualLocalStream &&
+      user &&
+      peer
+    ) {
       // peer が開くまで待つ
       let count = 0
       const tid = setInterval(async () => {
@@ -130,10 +129,18 @@
       return
     }
 
-    join({user, peer, localStream: actualLocalStream})
+    join({ user, peer, localStream: actualLocalStream })
   }
 
-  async function join({ user, peer, localStream }: { user: UserSerializer, peer: Peer, localStream: MediaStream }) {
+  async function join({
+    user,
+    peer,
+    localStream,
+  }: {
+    user: UserSerializer
+    peer: Peer
+    localStream: MediaStream
+  }) {
     self = {
       name: user.email,
       userId: user.pk,
@@ -149,35 +156,28 @@
     localStorage.setItem(`currentRoom`, roomId)
 
     // イベントハンドリング
-    room.once(`open`, () => chatElement.writeLog(`参加しました！`))
+    room.once(`open`, () => {
+      chatElement.writeLog(`参加しました！`)
 
-    room.on(`peerJoin`, (peerId) => {
+      room.members.forEach((member) => {
+        joinMember(member)
+      })
+    })
+
+    room.on(`peerJoin`, async (peerId) => {
+      console.log(`peerJoin is called`)
+
+      await joinMember(peerId)
+
       const member = getMember(peerId)
       chatElement.writeLog(`${member ? member.name : peerId} が参加しました！`)
     })
 
     room.on(`stream`, async (stream) => {
-      const member = getMember(stream.peerId)
+      console.log(`called stream`, roomMembers)
 
-      if (member) {
-        member.stream = stream
-      } else {
-        const roomUser = (await roomInfo)?.room_members.find(
-          (roomMember) => (roomMember.user.pk = stream.peerId)
-        )
-
-        if (roomUser) {
-          roomMembers = [
-            ...roomMembers,
-            {
-              name: roomUser.user.email,
-              userId: roomUser.user.pk,
-              stream: stream,
-              video: null,
-            },
-          ]
-        }
-      }
+      await joinMember(stream.id)
+      setStream(stream)
     })
 
     room.on(`data`, ({ data, src }) => {
@@ -198,11 +198,8 @@
     room.on(`peerLeave`, (peerId) => {
       console.log("peerLeave is called")
       const member = getMember(peerId)
-      if (member?.video && member?.video !== null) {
-        console.log("null: ", member.video)
-        member.video.remove()
-      }
-      roomMembers = roomMembers.filter((member) => member.userId !== peerId)
+
+      roomMembers = roomMembers.filter((roomMember) => roomMember.userId !== peerId)
 
       chatElement.writeLog(`${member ? member.name : peerId} が退出しました`)
     })
@@ -211,10 +208,6 @@
       chatElement.writeLog(`退出しました`)
       localStorage.setItem(`isJoin`, `false`)
       localStorage.removeItem(`currentRoom`)
-
-      roomMembers.forEach((roomMember) => {
-        roomMember.video?.remove()
-      })
 
       moveToCompletePage()
     })
@@ -230,12 +223,53 @@
 
       setTimeout(() => {
         moveToCompletePage()
-      }, remainingTime);
+      }, remainingTime)
     }
   }
 
   function leave() {
     room.close()
+  }
+
+  function getRoomMember(userId: string): RoomMember | undefined {
+    return roomMembers.find((roomMember) => roomMember.userId === userId)
+  }
+
+  async function joinMember(peerId: string): Promise<void> {
+    const roomUser = (await roomInfo)?.room_members.find(
+      (roomMember) => roomMember.user.pk === peerId,
+    )
+
+    if (!roomUser) return
+
+    const roomMember = getRoomMember(peerId)
+
+    if (!roomMember) {
+      roomMembers = [
+        ...roomMembers,
+        {
+          name: roomUser.user.email,
+          userId: roomUser.user.pk,
+          stream: null,
+          // video: null,
+        },
+      ]
+    }
+
+    console.log(`roomMembers: `, roomMembers)
+  }
+
+  function setStream(stream: RoomStream): void {
+    const roomMember = getRoomMember(stream.peerId)
+    if (!roomMember) {
+      console.log(`参加予定のないユーザーからのStream接続です`)
+      return
+    }
+
+    roomMember.stream = stream
+    roomMembers = roomMembers
+
+    console.log(`roomMembers: `, roomMembers)
   }
 
   function getMember(id: string): RoomMember | undefined {
@@ -277,11 +311,12 @@
           bind:this={localStreamElement} />
       </div>
       {#each roomMembers as roomMember, index}
-        <StreamVideo
-          videoSrc={roomMember.stream}
-          isLocal={false}
-          isMute={true}
-          bind:this={roomMembers[index].video} />
+        {#if roomMember.stream}
+          <StreamVideo
+            videoSrc={roomMember.stream}
+            isLocal={false}
+            isMute={true} />
+        {/if}
       {/each}
     </div>
 
