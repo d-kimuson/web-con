@@ -166,3 +166,15 @@ class UpdateRoomSettingView(ProjectBaseMixin, UpdateView):
             'activate_tag_list': self.request.session['activate_tag_list'],
         })
         return context
+
+
+class ParticipateRoom(ProjectBaseMixin, DetailView):
+    model = Room
+    template_name = 'participate_room.html'
+
+    # def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+    #     context = super().get_context_data(**kwargs)
+    #     context.update({
+    #         'activate_tag_list': self.request.session['activate_tag_list'],
+    #     })
+    #     return context

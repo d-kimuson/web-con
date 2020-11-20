@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load render_bundle from webpack_loader %}
+
+{% block external_header %}
+{% render_bundle 'setting_recruit' 'css' %}
+{% endblock %}
+
+{% block title %}Index{% endblock %}
+
+{% block content %}
+<div>{{room.title}}</div>
+<div>{{room.description}}</div>
+{% for tag in room.tags %}
+<div>{{tag.name}}</div>
+{% endfor %}
+<div>参加者一覧</div>
+{% for member in room.members %}
+<div>{{member.email}}</div>
+{% endfor %}
+<div>終了時刻 : {{room.end_datetime}}</div>
+<a href="{% url 'web_con:search'%}">他の部屋を探す</a>
+{% endblock %}
+
+{% block external_footer %}
+{% render_bundle 'setting_recruit' 'js' %}
+{% endblock %}

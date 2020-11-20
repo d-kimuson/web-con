@@ -22,7 +22,7 @@
     <ul>
       {% for room in object_list %}
       <li>
-        <a href="{% url 'web_con:call' room.pk %}">
+        <a href="{% url 'web_con:participate_room' room.pk %}">
           <div>
             {{ room.title }}
           </div>

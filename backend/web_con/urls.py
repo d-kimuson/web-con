@@ -14,6 +14,7 @@ urlpatterns = [
     path('user/<str:pk>', views.UserProfileView.as_view(), name='user_profile'),
     path('setting_recruit', views.SettingRecruitView.as_view(), name='setting_recruit'),
     path('update_room_setting/<str:pk>', views.UpdateRoomSettingView.as_view(), name='update_room_setting'),
+    path('participate_room/<str:pk>', views.ParticipateRoom.as_view(), name='participate_room'),
     # API Documentation
     path(
         'schema/',
