@@ -100,7 +100,7 @@ class UserProfileView(ProjectBaseMixin, DetailView):
         context = super().get_context_data(**kwargs)
         context.update({
             'rooms': Room.objects.filter(roomuser__user=self.request.user),  # type: ignore
-            'owner_rooms': Room.objects.filter(created_by = self.request.user),  # type: ignore
+            'owner_rooms': Room.objects.filter(created_by=self.request.user),  # type: ignore
         })
         return context
 
@@ -136,13 +136,11 @@ class SettingRecruitView(ProjectBaseMixin, CreateView):
         return super().form_valid(form)
 
 
-
 class UpdateRoomSettingView(ProjectBaseMixin, UpdateView):
     model = Room
     template_name = 'update_room_setting.html'
     form_class = CreateRoomForm
-    
-    
+
     # def get_succss_url(self):
     #     return reverse_lazy('web_con:user/<str:pk>',kwargs = {'pk': self.kwargs['pk']})
 
