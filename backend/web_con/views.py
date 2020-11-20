@@ -47,10 +47,10 @@ class SearchView(ProjectBaseMixin, ListView):
             'activate_search': search_title,
         })
         search_all = search_all.filter(
-            reduce(lambda s, t: s | Q(roomtag__tag__pk=t), tag_list, Q(
-                title__icontains=search_title
-            )),
+            Q(title__icontains=search_title) &
+            reduce(lambda s, t: s | Q(roomtag__tag__pk=t), tag_list, Q())
         ).distinct()
+
         return search_all
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
