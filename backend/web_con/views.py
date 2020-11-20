@@ -6,7 +6,7 @@ from django.forms.models import BaseModelForm
 from django.http.response import Http404
 from django.shortcuts import redirect
 from django.http import HttpRequest, HttpResponse
-from django.views.generic import TemplateView, DetailView, ListView, CreateView
+from django.views.generic import TemplateView, DetailView, ListView, CreateView, UpdateView
 from django.db.models import Model, Q
 from django.db.models.query import QuerySet
 from django.core.exceptions import ValidationError
@@ -99,7 +99,8 @@ class UserProfileView(ProjectBaseMixin, DetailView):
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
         context.update({
-            'rooms': Room.objects.filter(roomuser__user=self.request.user)  # type: ignore
+            'rooms': Room.objects.filter(roomuser__user=self.request.user),  # type: ignore
+            'owner_rooms': Room.objects.filter(created_by = self.request.user),  # type: ignore
         })
         return context
 
@@ -133,3 +134,37 @@ class SettingRecruitView(ProjectBaseMixin, CreateView):
                 roomtag.save()
 
         return super().form_valid(form)
+
+
+
+class UpdateRoomSettingView(ProjectBaseMixin, UpdateView):
+    model = Room
+    template_name = 'update_room_setting.html'
+    form_class = CreateRoomForm
+    
+    
+    # def get_succss_url(self):
+    #     return reverse_lazy('web_con:user/<str:pk>',kwargs = {'pk': self.kwargs['pk']})
+
+    def get_queryset(self) -> QuerySet[Model]:
+        search_all = super().get_queryset()
+        search_title = self.request.GET.get('keyword', '')
+        tag_list = [key.replace('tag_', '') for key in self.request.GET.keys() if 'tag_' in key]
+        self.request.session.update({
+            'activate_tag_list': tag_list,
+            'activate_search': search_title,
+        })
+        search_all = search_all.filter(
+            reduce(lambda s, t: s | Q(roomtag__tag__pk=t), tag_list, Q(
+                title__icontains=search_title
+            )),
+        ).distinct()
+        return search_all
+
+    def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context.update({
+            'tag_list': Tag.objects.all(),
+            'activate_tag_list': self.request.session['activate_tag_list'],
+        })
+        return context

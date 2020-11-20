@@ -13,6 +13,7 @@ urlpatterns = [
     path('completed_call', views.CallCompoletedView.as_view(), name='completed_call'),
     path('user/<str:pk>', views.UserProfileView.as_view(), name='user_profile'),
     path('setting_recruit', views.SettingRecruitView.as_view(), name='setting_recruit'),
+    path('update_room_setting/<str:pk>', views.UpdateRoomSettingView.as_view(), name='update_room_setting'),
     # API Documentation
     path(
         'schema/',

@@ -31,6 +31,15 @@
     {% endfor %}
   </ul>
 
+  <h2>Ownerの通話の編集</h2>
+  <ul>
+    {% for owner_room in owner_rooms %}
+    <li>
+      <a href="{% url 'web_con:update_room_setting' owner_room.pk %}">{{owner_room.title}}</a>
+    </li>
+    {% endfor %}
+  </ul>
+
 </section>
 {% endblock %}
 
