@@ -8,7 +8,7 @@
 {% block title %}Index{% endblock %}
 
 {% block content %}
-<h1>募集画面設定</h1>
+<h1>部屋の設定変更</h1>
 <section>
   <form method="post">
     {% csrf_token %}
@@ -17,12 +17,15 @@
     </table>
     {% for tag in tag_list %}
     <label>
+      {% if tag.pk|stringformat:"s" in activate_tag_list %}
+      <input type="checkbox" name="tag_{{tag.pk}}" checked>
+      {% else %}
       <input type="checkbox" name="tag_{{tag.pk}}">
+      {% endif %}
       {{tag.name}}
-      
     </label>
     {% endfor %}
-    <input type="submit"  value="作成する">
+    <input type="submit"  value="変更する">
   </form>
 </section>
 
