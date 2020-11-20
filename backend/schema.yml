@@ -512,12 +512,14 @@ components:
         is_possible_join:
           type: boolean
         room_members:
-          type: object
-          additionalProperties: {}
+          type: array
+          items:
+            $ref: '#/components/schemas/RoomUser'
           readOnly: true
         tags:
-          type: object
-          additionalProperties: {}
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
           readOnly: true
     PatchedUser:
       type: object
@@ -551,12 +553,14 @@ components:
         is_possible_join:
           type: boolean
         room_members:
-          type: object
-          additionalProperties: {}
+          type: array
+          items:
+            $ref: '#/components/schemas/RoomUser'
           readOnly: true
         tags:
-          type: object
-          additionalProperties: {}
+          type: array
+          items:
+            $ref: '#/components/schemas/Tag'
           readOnly: true
       required:
       - end_datetime
@@ -565,6 +569,33 @@ components:
       - start_datetime
       - tags
       - title
+    RoomUser:
+      type: object
+      properties:
+        pk:
+          type: string
+          format: uuid
+          readOnly: true
+        user:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+      required:
+      - pk
+      - user
+    Tag:
+      type: object
+      properties:
+        pk:
+          type: string
+          format: uuid
+          readOnly: true
+        name:
+          type: string
+          maxLength: 127
+      required:
+      - name
+      - pk
     User:
       type: object
       properties:
