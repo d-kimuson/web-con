@@ -1,3 +1,4 @@
+// @ts-nocheck
 // tslint:disable
 /**
  * 
@@ -12,7 +13,7 @@
  */
 
 
-import type { Configuration } from "./configuration";
+import { Configuration } from "./configuration";
 // Some imports not used depending on template conditions
 // @ts-ignore
 import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';

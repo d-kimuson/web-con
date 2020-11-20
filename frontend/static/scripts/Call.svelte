@@ -3,7 +3,7 @@
   import { onMount } from 'svelte'
   import dayjs from "dayjs"
 
-  import { loginUser, roomDetail } from "@scripts/api"
+  import { endpoints } from "@scripts/api"
   import AsyncStreamVideo from "@scripts/components/AsyncStreamVideo.svelte"
   import StreamVideo from "@scripts/components/StreamVideo.svelte"
   import Chat from "@scripts/components/Chat.svelte"
@@ -32,21 +32,27 @@
   }
 
   let roomMembers: RoomMember[] = []
-  let roomInfo = roomDetail(roomId)
+  let roomInfo = endpoints.apiRoomsRetrieve(roomId)
+    .then(response => ({
+      ...response.data,
+      end_datetime: dayjs(response.data.end_datetime),
+      start_datetime: dayjs(response.data.start_datetime),
+    }))
   let isJoin = false
 
   // ページロード時
   onMount(async () => {
-    // ログインユーザー情報の取得
-    const response = await loginUser()
+    // test
 
-    if (!response) {
+    const response = await endpoints.apiUsersLoginUserRetrieve()
+
+    if (!response.data) {
       // TODO: ログインページへの誘導などしたほうが良い
       alert(`ログイン状態を確認してください`)
       return
     }
 
-    user = response
+    user = response.data
 
     // 接続用 Peer の準備
     // TODO: skyway 側で 登録済みユーザー以外の参加を弾く必要がある

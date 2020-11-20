@@ -1,3 +1,4 @@
+// @ts-nocheck
 // tslint:disable
 /**
  * 
@@ -12,9 +13,8 @@
  */
 
 
-// @ts-ignore
 import * as globalImportUrl from 'url';
-import type { Configuration } from './configuration';
+import { Configuration } from './configuration';
 import globalAxios, { AxiosPromise, AxiosInstance } from 'axios';
 // Some imports not used depending on template conditions
 // @ts-ignore
@@ -64,16 +64,16 @@ export interface PatchedRoom {
     is_possible_join?: boolean;
     /**
      * 
-     * @type {{ [key: string]: AnyType; }}
+     * @type {Array<RoomUser>}
      * @memberof PatchedRoom
      */
-    room_members?: { [key: string]: AnyType; };
+    room_members?: Array<RoomUser>;
     /**
      * 
-     * @type {{ [key: string]: AnyType; }}
+     * @type {Array<Tag>}
      * @memberof PatchedRoom
      */
-    tags?: { [key: string]: AnyType; };
+    tags?: Array<Tag>;
 }
 /**
  * 
@@ -138,16 +138,54 @@ export interface Room {
     is_possible_join?: boolean;
     /**
      * 
-     * @type {{ [key: string]: AnyType; }}
+     * @type {Array<RoomUser>}
      * @memberof Room
      */
-    room_members: { [key: string]: AnyType; };
+    room_members: Array<RoomUser>;
     /**
      * 
-     * @type {{ [key: string]: AnyType; }}
+     * @type {Array<Tag>}
      * @memberof Room
      */
-    tags: { [key: string]: AnyType; };
+    tags: Array<Tag>;
+}
+/**
+ * 
+ * @export
+ * @interface RoomUser
+ */
+export interface RoomUser {
+    /**
+     * 
+     * @type {string}
+     * @memberof RoomUser
+     */
+    pk: string;
+    /**
+     * 
+     * @type {User}
+     * @memberof RoomUser
+     */
+    user: User;
+}
+/**
+ * 
+ * @export
+ * @interface Tag
+ */
+export interface Tag {
+    /**
+     * 
+     * @type {string}
+     * @memberof Tag
+     */
+    pk: string;
+    /**
+     * 
+     * @type {string}
+     * @memberof Tag
+     */
+    name: string;
 }
 /**
  * 
