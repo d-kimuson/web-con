@@ -13,12 +13,8 @@ class CreateRoomForm(forms.ModelForm):
     dt_now = datetime.datetime.now()
     td = datetime.timedelta(hours=1)
     dt_one_hour_after = dt_now + td
-    start_datetime = forms.CharField(widget=forms.TextInput(attrs={
-        'placeholder': dt_now.strftime('%Y-%m-%d %H:%M:%S')
-    }))
-    end_datetime = forms.CharField(widget=forms.TextInput(attrs={
-        'placeholder': dt_one_hour_after.strftime('%Y-%m-%d %H:%M:%S')
-    }))
+    start_datetime = forms.SplitDateTimeField()
+    end_datetime = forms.SplitDateTimeField()
 
     class Meta:
         model = Room
