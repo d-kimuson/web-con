@@ -1,4 +1,11 @@
+# OpenApiTracker
+wwwroot/*.js
+typings
+dist
+
+# interact with webpack and django
 webpack-stats.json
+
 # Logs
 logs
 *.log

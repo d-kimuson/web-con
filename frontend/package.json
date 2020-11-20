@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "license": "MIT",
   "devDependencies": {
+    "@openapitools/openapi-generator-cli": "^2.1.4",
     "@tsconfig/svelte": "^1.0.10",
     "@typescript-eslint/eslint-plugin": "^4.4.1",
     "@typescript-eslint/parser": "^4.6.0",
@@ -52,7 +53,8 @@
     "lint:stylelint": "stylelint 'static/styles/**/*.scss' --fix",
     "check:ts": "tsc --noEmit",
     "check:svelte": "svelte-check",
-    "check:all": "yarn check:ts && yarn check:svelte && yarn lint"
+    "check:all": "yarn check:ts && yarn check:svelte && yarn lint",
+    "openapi:gen": "openapi-generator-cli generate -g typescript-axios -i ../backend/schema.yml -o ./static/openapi"
   },
   "dependencies": {
     "axios": "^0.21.0",

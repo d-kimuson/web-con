@@ -1,6 +1,8 @@
 import axios from "axios"
 import dayjs, { Dayjs } from "dayjs"
 
+import { ApiApiFactory as getEndpoints, Configuration } from "../openapi"
+
 export const api = axios.create({
   baseURL: `/api/`,
   timeout: 1000,
@@ -8,6 +10,9 @@ export const api = axios.create({
   xsrfCookieName: `csrftoken`,
   xsrfHeaderName: `X-CSRFTOKEN`,
 })
+
+const config = new Configuration()
+export const endpoints = getEndpoints(config, `http://localhost:3000`, api)
 
 interface Response<T> {
   status: number
