@@ -3,6 +3,7 @@ from rest_framework.request import Request
 from rest_framework .response import Response
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated
+from drf_spectacular.utils import extend_schema
 
 from accounts.models import User
 from accounts.serializers import UserSerializer
@@ -14,6 +15,14 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+    @extend_schema(
+        responses={
+            200: UserSerializer
+        },
+        methods=['GET', ],
+        summary="login_user_detail",
+        description="ログインユーザーの情報を返します",
+    )
     @action(methods=['GET'], detail=False, url_path='login_user', permission_classes=(IsAuthenticated,))
     def login_user(self, request: Request) -> Response:
         return Response(

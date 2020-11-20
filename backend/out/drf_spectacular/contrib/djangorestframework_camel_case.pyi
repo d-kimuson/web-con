@@ -1,0 +1,3 @@
+from typing import Any
+
+def camelize_serializer_fields(result: Any, generator: Any, request: Any, public: Any): ...

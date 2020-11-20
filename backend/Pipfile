@@ -14,6 +14,7 @@ mypyls = {file = "https://github.com/matangover/mypyls/archive/master.zip"}
 pytest = "*"
 pytest-django = "*"
 djangorestframework-stubs = "*"
+drf-spectacular = "*"
 
 [packages]
 django = "*"
@@ -33,5 +34,6 @@ sync    = "bash -c 'pipenv install --dev && python manage.py migrate && python m
 check   = "bash -c 'python manage.py check && flake8 .'"
 test    = "py.test"
 stubgen = "stubgen -p"
+schema  = "python manage.py spectacular --file schema.yml"
 dump_db = "bash -c 'python manage.py dumpdata accounts web_con > ./fixtures/tmp.json'"
 load_db = "python manage.py loaddata"

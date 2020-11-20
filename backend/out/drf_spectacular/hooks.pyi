@@ -1,0 +1,6 @@
+from drf_spectacular.plumbing import ResolvedComponent as ResolvedComponent, list_hash as list_hash, load_enum_name_overrides as load_enum_name_overrides, safe_ref as safe_ref, warn as warn
+from drf_spectacular.settings import spectacular_settings as spectacular_settings
+from typing import Any
+
+def postprocess_schema_enums(result: Any, generator: Any, **kwargs: Any): ...
+def preprocess_exclude_path_format(endpoints: Any, **kwargs: Any): ...
