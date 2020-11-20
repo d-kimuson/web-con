@@ -17,8 +17,9 @@
     </table>
     {% for tag in tag_list %}
     <label>
-      {{tag.name}}
       <input type="checkbox" name="tag_{{tag.pk}}">
+      {{tag.name}}
+      
     </label>
     {% endfor %}
     <input type="submit"  value="作成する">
