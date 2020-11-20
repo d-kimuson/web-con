@@ -9,7 +9,12 @@ ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS += [
     'django_extensions',
+    'drf_spectacular',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
 
 DATABASES = {
     # 接続情報は、 `./db/Dockerfile` を参照すること

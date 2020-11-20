@@ -80,7 +80,7 @@ class Room(models.Model):
         return self.start_datetime < time < self.end_datetime
 
     def __repr__(self) -> str:
-        return "Room <{}>".format(self.id)
+        return "Room <{}>".format(self.title)
 
     __str__ = __repr__
 
@@ -133,9 +133,8 @@ class RoomUser(models.Model):
         on_delete=models.CASCADE,
         related_name='roomuser',
     )
-    peer_id = models.CharField(
-        max_length=127,
-        null=True,
-        blank=True,
-        unique=True,
-    )
+
+    def __repr__(self) -> str:
+        return "RoomUser <{}, {}>".format(self.room, self.user)
+
+    __str__ = __repr__

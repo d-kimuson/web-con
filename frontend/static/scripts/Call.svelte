@@ -1,6 +1,9 @@
 <script lang="ts">
   import Peer, { SfuRoom } from "skyway-js"
-  import { joinRoom, roomDetail } from "@scripts/api"
+  import { onMount } from 'svelte'
+  import dayjs from "dayjs"
+
+  import { endpoints } from "@scripts/api"
   import AsyncStreamVideo from "@scripts/components/AsyncStreamVideo.svelte"
   import StreamVideo from "@scripts/components/StreamVideo.svelte"
   import Chat from "@scripts/components/Chat.svelte"
@@ -11,11 +14,9 @@
 
   const url = new URL(location.href)
   const roomId = url.pathname.split(`/`).slice(-1)[0]
-  const peer = new Peer({
-    key: roomKey,
-    debug: 3,
-  })
 
+  let peer: Peer | undefined
+  let user: UserSerializer | undefined
   let localStream = getLocalStream()
   let room: SfuRoom
 
@@ -26,13 +27,71 @@
   interface RoomMember {
     name: string
     userId: string
-    peerId: string
     stream: MediaStream
     video: StreamVideo | null
   }
 
   let roomMembers: RoomMember[] = []
+  let roomInfo = endpoints.apiRoomsRetrieve(roomId)
+    .then(response => ({
+      ...response.data,
+      end_datetime: dayjs(response.data.end_datetime),
+      start_datetime: dayjs(response.data.start_datetime),
+    }))
   let isJoin = false
+
+  // ページロード時
+  onMount(async () => {
+    // test
+
+    const response = await endpoints.apiUsersLoginUserRetrieve()
+
+    if (!response.data) {
+      // TODO: ログインページへの誘導などしたほうが良い
+      alert(`ログイン状態を確認してください`)
+      return
+    }
+
+    user = response.data
+
+    // 接続用 Peer の準備
+    // TODO: skyway 側で 登録済みユーザー以外の参加を弾く必要がある
+    peer = new Peer(user.pk, {
+      key: roomKey,
+      debug: 3,
+    })
+
+    const actualLocalStream = await localStream
+
+    // リロード 自動で再接続
+    if (localStorage.getItem(`isJoin`) === `true` &&
+        localStorage.getItem(`currentRoom`) === roomId &&
+        actualLocalStream && user && peer) {
+
+      // peer が開くまで待つ
+      let count = 0
+      const tid = setInterval(async () => {
+        if (count > 5) {
+          // 5秒でタイムアウト
+          clearInterval(tid)
+        }
+
+        if (user && peer && peer.open) {
+          // peer が開いたのを確認して参加する
+
+          clearInterval(tid)
+          try {
+            join({ user, peer, localStream: actualLocalStream })
+          } catch (error) {
+            console.log(`ERROR`, error)
+          }
+        }
+
+        count++
+        console.log(`${count} 秒たった`)
+      }, 1000)
+    }
+  })
 
   // Functions
   async function getLocalStream(): Promise<MediaStream | null> {
@@ -47,38 +106,47 @@
       })
   }
 
-  async function join() {
-    if (!peer.open) {
-      alert(`参加準備が整っていません`)
-      return
-    }
-
+  async function checkAndJoin() {
     const actualLocalStream = await localStream
     if (!actualLocalStream) {
       alert(`カメラとマイクに問題があります`)
       return
     }
 
-    // 参加をサーバーに伝える
-    const response = await joinRoom(roomId, peer.id)
-    if (!response) {
-      alert(`参加できませんでした`)
+    if (!peer) {
+      alert(`参加準備が整っていません`)
+      console.log(`because peer is undefined`)
       return
     }
 
-    console.log(response)
+    if (!peer.open) {
+      alert(`参加準備が整っていません`)
+      console.log(`because peer is not open`)
+      return
+    }
 
+    if (!user) {
+      alert(`ログイン状態を確認してください`)
+      return
+    }
+
+    join({user, peer, localStream: actualLocalStream})
+  }
+
+  async function join({ user, peer, localStream }: { user: UserSerializer, peer: Peer, localStream: MediaStream }) {
     self = {
-      name: response.user.email,
-      userId: response.user.pk,
-      peerId: peer.id,
+      name: user.email,
+      userId: user.pk,
     }
     isJoin = true
 
     room = peer.joinRoom<SfuRoom>(roomId, {
       mode: roomMode,
-      stream: actualLocalStream,
+      stream: localStream,
     })
+
+    localStorage.setItem(`isJoin`, `true`)
+    localStorage.setItem(`currentRoom`, roomId)
 
     // イベントハンドリング
     room.once(`open`, () => chatElement.writeLog(`参加しました！`))
@@ -94,9 +162,9 @@
       if (member) {
         member.stream = stream
       } else {
-        const roomUser = (await roomDetail(roomId))
-          ?.room_members
-          .find(roomMember => roomMember.peer_id = stream.peerId)
+        const roomUser = (await roomInfo)?.room_members.find(
+          (roomMember) => (roomMember.user.pk = stream.peerId)
+        )
 
         if (roomUser) {
           roomMembers = [
@@ -104,7 +172,6 @@
             {
               name: roomUser.user.email,
               userId: roomUser.user.pk,
-              peerId: stream.peerId,
               stream: stream,
               video: null,
             },
@@ -121,7 +188,6 @@
         chatElement.reveiveMessage(
           {
             name: member.name,
-            peerId: member.peerId,
             userId: member.userId,
           },
           data,
@@ -136,20 +202,36 @@
         console.log("null: ", member.video)
         member.video.remove()
       }
-      roomMembers = roomMembers.filter((member) => member.peerId !== peerId)
+      roomMembers = roomMembers.filter((member) => member.userId !== peerId)
 
       chatElement.writeLog(`${member ? member.name : peerId} が退出しました`)
     })
 
     room.once(`close`, () => {
       chatElement.writeLog(`退出しました`)
+      localStorage.setItem(`isJoin`, `false`)
+      localStorage.removeItem(`currentRoom`)
 
       roomMembers.forEach((roomMember) => {
         roomMember.video?.remove()
       })
 
-      window.location.href = `/completed_call`
+      moveToCompletePage()
     })
+
+    // 自動退出
+    const now = dayjs()
+    const endTime = (await roomInfo)?.end_datetime
+
+    if (endTime) {
+      // 残り時間によっては、setTimeout の最大時間を超えてしまうので。
+      // とりあえず最大でも5時間を想定する
+      const remainingTime = Math.min(endTime.diff(now), 5 * 60 * 60 * 1000)
+
+      setTimeout(() => {
+        moveToCompletePage()
+      }, remainingTime);
+    }
   }
 
   function leave() {
@@ -157,7 +239,11 @@
   }
 
   function getMember(id: string): RoomMember | undefined {
-    return roomMembers.find((member) => member.peerId === id)
+    return roomMembers.find((member) => member.userId === id)
+  }
+
+  function moveToCompletePage() {
+    window.location.href = `/completed_call`
   }
 </script>
 
@@ -178,7 +264,7 @@
   <div class="room">
     <div>
       {#if !isJoin}
-        <button on:click={join}>参加する</button>
+        <button on:click={checkAndJoin}>参加する</button>
       {:else}<button on:click={leave}>退席する</button>{/if}
     </div>
 
