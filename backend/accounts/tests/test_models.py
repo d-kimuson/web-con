@@ -12,6 +12,22 @@ def basic_user():
 
 
 @pytest.fixture
+def basic_user2():
+    return User.objects.create_user(
+        email='user2@example.com',
+        password='password'
+    )
+
+
+@pytest.fixture
+def basic_user3():
+    return User.objects.create_user(
+        email='user3@example.com',
+        password='password'
+    )
+
+
+@pytest.fixture
 def admin_user():
     return User.objects.create_superuser(
         email='admin@example.com',
