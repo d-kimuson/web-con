@@ -22,6 +22,9 @@
       "@styles/*": [
         "styles/*"
       ],
+      "@svelte/*": [
+        "scripts/svelte/*"
+      ]
     },
     "strict": true,
   },

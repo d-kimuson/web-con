@@ -1,5 +1,5 @@
 <script lang="ts">
-  import StreamVideo from "@scripts/components/StreamVideo.svelte"
+  import StreamVideo from "@svelte/components/StreamVideo.svelte"
 
   // Component Props
   export let videoSrc: Promise<MediaStream | null>

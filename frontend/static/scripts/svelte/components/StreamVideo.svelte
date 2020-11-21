@@ -1,6 +1,6 @@
 <script lang="ts">
   import { onMount } from "svelte"
-  import { isMute as isMuteStore, isVideoOn as isVideoOnStore } from "@scripts/store"
+  import { isMuteStore, isVideoOnStore } from "@svelte/store"
 
   // Component Props
   export let videoSrc: MediaStream | null

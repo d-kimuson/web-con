@@ -4,9 +4,9 @@
   import dayjs from "dayjs"
 
   import { endpoints } from "@scripts/api"
-  import AsyncStreamVideo from "@scripts/components/AsyncStreamVideo.svelte"
-  import StreamVideo from "@scripts/components/StreamVideo.svelte"
-  import Chat from "@scripts/components/Chat.svelte"
+  import AsyncStreamVideo from "@svelte/components/AsyncStreamVideo.svelte"
+  import StreamVideo from "@svelte/components/StreamVideo.svelte"
+  import Chat from "@svelte/components/Chat.svelte"
 
   // Variables
   const roomMode = `sfu`

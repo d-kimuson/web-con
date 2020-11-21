@@ -1,6 +1,6 @@
-import CallApp from "@scripts/Call.svelte"
+import CallApp from "@svelte/entries/Call.svelte"
 
-import { getElementById } from "@scripts/util"
+import { getElementById } from "@scripts/utils"
 
 const callApp = new CallApp({
   target: getElementById(`svelte`),
