@@ -6,7 +6,7 @@ from .models import Room
 from django import forms
 from datetime import datetime, timedelta
 # from django.contrib.admin.widgets import AdminDateWidget
-from typing import Optional
+from typing import Optional, Any
 
 
 def convert_datetime_to_html_attrs(dt: Optional[datetime]) -> Optional[str]:
@@ -24,7 +24,6 @@ def convert_datetime_to_html_attrs(dt: Optional[datetime]) -> Optional[str]:
 def get_calender_datetime_widget(
     min: Optional[datetime] = None,
     max: Optional[datetime] = None,
-    initial_value: Optional[datetime] = None,
     step_minute: int = 1,
 ) -> forms.DateTimeInput:
     """カレンダー型の日付&時間入力ウィジェットを作成する関数
@@ -34,22 +33,22 @@ def get_calender_datetime_widget(
     Args:
         min (Optional[datetime], optional): 最小の入力値. Defaults to None.
         max (Optional[datetime], optional): 最大の入力値. Defaults to None.
-        initial_value (Optional[datetime], optional): 初期値. Defaults to None.
         step_minute (int, optional): 入力の刻み値(単位: 分). Defaults to 1
 
     Returns:
         forms.DateTimeInput: 作成されたウィジェット
     """
-    return forms.DateTimeInput(
+    form = forms.DateTimeInput(
         attrs={
             "type": "datetime-local",
-            "required": True,
             "min": convert_datetime_to_html_attrs(min),
             "max": convert_datetime_to_html_attrs(max),
-            "value": convert_datetime_to_html_attrs(initial_value),
             "step": 60 * step_minute,
-        }
+        },
+        format="%Y-%m-%dT%H:%M"
     )
+
+    return form
 
 
 class CreateRoomForm(forms.ModelForm):
@@ -70,12 +69,6 @@ class CreateRoomForm(forms.ModelForm):
         widget=get_calender_datetime_widget(
             min=dt_now,
             max=dt_now + timedelta(days=14),
-            initial_value=datetime(
-                year=dt_now.year,
-                month=dt_now.month,
-                day=dt_now.day,
-                hour=dt_now.hour + 1
-            ),
             step_minute=30
         )
     )
@@ -83,12 +76,6 @@ class CreateRoomForm(forms.ModelForm):
         widget=get_calender_datetime_widget(
             min=dt_now,
             max=dt_now + timedelta(days=14),
-            initial_value=datetime(
-                year=dt_now.year,
-                month=dt_now.month,
-                day=dt_now.day,
-                hour=dt_now.hour + 2
-            ),
             step_minute=30
         )
     )
@@ -102,3 +89,26 @@ class CreateRoomForm(forms.ModelForm):
         # 'start_datetime': DateTimeInput(format='%m/%d/%y %H:%M:%S'),
         # 'end_datetime': DateTimeInput(format='%m/%d/%y %H:%M:%S'),
         # }
+
+    def __init__(self, *args: Any, **kwargs: Any) -> None:
+        now = datetime.now()
+        if kwargs.get("instance", None) is None:
+            # デフォルト値を
+            kwargs.update({
+                "initial": {
+                    "start_datetime": convert_datetime_to_html_attrs(datetime(
+                        year=now.year,
+                        month=now.month,
+                        day=now.day,
+                        hour=now.hour + 1
+                    )),
+                    "end_datetime": convert_datetime_to_html_attrs(datetime(
+                        year=now.year,
+                        month=now.month,
+                        day=now.day,
+                        hour=now.hour + 2
+                    ))
+                }
+            })
+
+        super().__init__(*args, **kwargs)
