@@ -8,6 +8,104 @@
   font-size: 1.6rem;
 }
 
+// ================
+// Input
+// ================
+.m-text-input {
+  padding: 4px 10px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+}
+
+// ================
+// Button
+// ================
+.m-button {
+  display: inline-block;
+  background: var.$blue;
+  color: var.$white;
+  padding: 3px 10px;
+  border-radius: 5px;
+  border: solid 2px var.$blue;
+  outline: none;
+  user-select: none;
+  cursor: pointer;
+  transition: 400ms ease;
+}
+
+.m-button--pink {
+  background: var.$pink;
+  border-color: var.$pink;
+}
+
+.m-button--outline {
+  &:hover {
+    background: transparent;
+    color: var.$text-color;
+  }
+}
+
+// ================
+// タグ
+// ================
+.m-tag {
+  background: var.$black-trans;
+  color: var.$white;
+  border-radius: 20px;
+  padding: 6px 12px;
+  list-style: none;
+  user-select: none;
+
+  // animation
+  transition: 300ms ease;
+}
+
+.m-tag--active {
+  // 色よくわからないので、とりあえずリンクカラーを当てときます
+  background: var.$link-color;
+}
+
+.m-tag--link {
+  &:hover {
+    @extend .m-tag--active;
+  }
+}
+
+.m-tag-checkbox {
+  input {
+    display: none;
+  }
+  label {
+    @extend .m-tag;
+  }
+  input:checked + label {
+    background: var.$link-color;
+  }
+}
+
+.m-tag-list {
+  display: flex;
+  flex-wrap: wrap;
+
+  & > * {
+    margin-block-start: 5px;
+    margin-block-end: 5px;
+
+    &:not(:first-child) {
+      margin-inline-start: 6px;
+      margin-inline-end: 0;
+    }
+  }
+}
+
+// ================
+// Card
+// ================
+
+// ================
+// ユーティリティ系
+// ================
 .m-theme-bg {
   background: var.$theme-color;
   color: var.$theme-reverse-color;

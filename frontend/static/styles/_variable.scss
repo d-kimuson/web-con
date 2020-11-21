@@ -2,6 +2,7 @@
 // color
 $black: #303030 !default;
 $black-weak: #707070 !default;
+$black-trans: transparentize($black, $amount: 0.6) !default;
 $white: #fafafa !default;
 $white-weak: #eaedf2 !default;
 $green: #64dd17 !default;
