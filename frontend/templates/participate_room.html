@@ -10,9 +10,13 @@
 {% block content %}
 <div>{{room.title}}</div>
 <div>{{room.description}}</div>
-{% for tag in room.tags %}
-<div>{{tag.name}}</div>
-{% endfor %}
+
+<ul class="m-tag-list">
+  {% for tag in room.tags %}
+  <li class="m-tag m-tag--active">{{tag.name}}</li>
+  {% endfor %}
+</ul>
+
 <div>参加者一覧</div>
 {% for member in room.members %}
 <div>{{member.email}}</div>
