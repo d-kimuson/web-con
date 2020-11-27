@@ -19,7 +19,7 @@
     <ul class="m-tag-list">
       {% for tag in tag_list %}
       <li class="m-tag-checkbox">
-        {% if tag.pk|stringformat:"s" in activate_tag_list %}
+        {% if tag.pk in activate_tag_list %}
         <input type="checkbox" name="tag_{{tag.pk}}" id="tag_{{tag.pk}}" checked>
         {% else %}
         <input type="checkbox" name="tag_{{tag.pk}}" id="tag_{{tag.pk}}">
