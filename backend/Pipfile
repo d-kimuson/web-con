@@ -15,6 +15,8 @@ pytest = "*"
 pytest-django = "*"
 djangorestframework-stubs = "*"
 drf-spectacular = "*"
+nplusone = "*"
+django-debug-toolbar = "*"
 
 [packages]
 django = "*"
