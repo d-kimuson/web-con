@@ -6,7 +6,7 @@
           "type": "python",
           "request": "launch",
           "stopOnEntry": false,
-          "pythonPath": "${workspaceRoot}/backend/.venv/bin/python",
+          "python": "${workspaceRoot}/backend/.venv/bin/python",
           "program": "${workspaceRoot}/backend/manage.py",
           "cwd": "${workspaceRoot}/backend",
           "args": [
