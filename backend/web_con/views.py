@@ -9,7 +9,7 @@ from django.http import HttpRequest, HttpResponse
 from django.views.generic import TemplateView, DetailView, ListView, CreateView, UpdateView
 from django.db.models import Model, Q
 from django.db.models.query import QuerySet
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from typing import Dict, Any, Optional
 from functools import reduce
 from django.urls import reverse_lazy, reverse
@@ -169,7 +169,8 @@ class UpdateRoomSettingView(ProjectBaseMixin, UpdateView):
                         tag=tag_instance, room=room)
                     print(roomtag)
                     print('--'*10)
-                except Exception as e:
+                except ObjectDoesNotExist as e:
+                    print(e)
                     continue
                 roomtag.delete()
 
