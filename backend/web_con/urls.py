@@ -1,5 +1,5 @@
 from django.urls import path
-from drf_spectacular import views as schema_views
+from django.conf import settings
 
 from . import views
 
@@ -15,20 +15,25 @@ urlpatterns = [
     path('setting_recruit', views.SettingRecruitView.as_view(), name='setting_recruit'),
     path('update_room_setting/<str:pk>', views.UpdateRoomSettingView.as_view(), name='update_room_setting'),
     path('participate_room/<str:pk>', views.ParticipateRoom.as_view(), name='participate_room'),
-    # API Documentation
-    path(
-        'schema/',
-        schema_views.SpectacularAPIView.as_view(),
-        name='schema'
-    ),
-    path(
-        'schema/swagger-ui/',
-        schema_views.SpectacularSwaggerView.as_view(url_name='web_con:schema'),
-        name='swagger-ui'
-    ),
-    path(
-        'schema/redoc/',
-        schema_views.SpectacularRedocView.as_view(url_name='web_con:schema'),
-        name='redoc'
-    ),
 ]
+
+if settings.DEBUG:
+    from drf_spectacular import views as schema_views
+
+    urlpatterns = urlpatterns + [
+        path(
+            'schema/',
+            schema_views.SpectacularAPIView.as_view(),
+            name='schema'
+        ),
+        path(
+            'schema/swagger-ui/',
+            schema_views.SpectacularSwaggerView.as_view(url_name='web_con:schema'),
+            name='swagger-ui'
+        ),
+        path(
+            'schema/redoc/',
+            schema_views.SpectacularRedocView.as_view(url_name='web_con:schema'),
+            name='redoc'
+        ),
+    ]

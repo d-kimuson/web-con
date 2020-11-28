@@ -14,7 +14,6 @@ mypyls = {file = "https://github.com/matangover/mypyls/archive/master.zip"}
 pytest = "*"
 pytest-django = "*"
 djangorestframework-stubs = "*"
-drf-spectacular = "*"
 nplusone = "*"
 django-debug-toolbar = "*"
 
@@ -25,6 +24,7 @@ django-allauth = "*"
 mysqlclient = "*"
 python-dotenv = "*"
 djangorestframework = "==3.11"
+drf-spectacular = "*"
 
 [requires]
 python_version = "3.8"

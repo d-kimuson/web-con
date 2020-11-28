@@ -1,0 +1,47 @@
+version: "3.7"
+
+services:
+  webcon_mysql:
+    build: ./backend/db
+    container_name: webcon_mysql
+    restart: always
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mounted/data:/var/lib/mysql
+    environment:
+      # ステージング用
+      MYSQL_ROOT_PASSWORD: root_password
+      MYSQL_DATABASE: web_con_django
+      MYSQL_USER: user
+      MYSQL_PASSWORD: user_password
+      TZ: "Asia/Tokyo"
+  webcon_django:
+    build: .
+    container_name: webcon_django
+    restart: always
+    expose:
+      - 8000
+    volumes:
+      - ./mounted/collected_static_files:/backend/static
+      - ./mounted/uwsgi:/backend/mounted
+    environment:
+      - DB_NAME=web_con_django
+      - DB_USER=user
+      - DB_PASSWORD=user_password
+      - DB_HOST=webcon_mysql
+      - DB_PORT=3306
+      - PRODUCT="yes"
+      - SECRET_KEY=HUGAHUGA
+    depends_on:
+      - webcon_mysql
+  webcon_nginx:
+    build: ./nginx
+    container_name: webcon_nginx
+    restart: always
+    ports:
+      - "80:80"
+    volumes:
+      - ./mounted/collected_static_files:/static
+    depends_on:
+      - webcon_django

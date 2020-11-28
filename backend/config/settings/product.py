@@ -1,3 +1,5 @@
+import os
+
 from .base import *
 
 DEBUG = False
@@ -11,20 +13,22 @@ if SECRET_KEY == '':
     # GENERATOR: https://djecrety.ir/
     raise SecretKeyNotSetException('環境変数にSECRET_KEYを設置してください')
 
+# Allowd Hosts
+ALLOWED_HOSTS = [
+    'localhost',
+    '127.0.0.1',
+]
+
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
-# ⇓ とりあえずMySQLのサンプル ⇓
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'app',
-        'USER': 'user',
-        'PASSWORD': 'password',
-        'HOST': '127.0.0.1',
-        'PORT': '3306',
-        'TEST': {
-            'NAME': 'test_app'
-        }
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
+        'PORT': os.environ.get('DB_PORT'),
     }
 }
 
