@@ -27,6 +27,7 @@ djangorestframework = "==3.11"
 drf-spectacular = "*"
 gunicorn = "*"
 django-toolbelt = "*"
+whitenoise = "*"
 
 [requires]
 python_version = "3.8"
