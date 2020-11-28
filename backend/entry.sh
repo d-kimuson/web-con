@@ -1,8 +1,5 @@
 #!/bin/bash
 
-set -e
-cmd="$@"
-
 # DB起動確認待ち
 python manage.py check &> /dev/null  # 永遠に始まらないときは、標準出力して確認したほうが良い
 STATUS_CODE=$?
@@ -22,5 +19,5 @@ python manage.py collectstatic --noinput
 
 # サーバー起動
 echo "Django Application is ready to run."
-echo "Start with CMD: $cmd"
-exec $cmd
+
+gunicorn config.wsgi:application --bind 0.0.0.0:$PORT

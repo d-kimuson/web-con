@@ -16,13 +16,10 @@ COPY --from=front-build /frontend/dist /frontend/dist
 COPY --from=front-build /frontend/templates /frontend/templates
 COPY --from=front-build /frontend/webpack-stats.json /frontend/webpack-stats.json
 
-RUN python -m pip install --upgrade pip
 RUN python -m pip install pipenv
 RUN python -m pipenv install --dev --system
-RUN python -m pip install uwsgi
 
 ENV DEBUG=false
 ENV SECRET_KEY=HUGAHUGA
 
-ENTRYPOINT [ "./entry.sh" ]
-CMD ["uwsgi", "uwsgi.ini"]
+ENTRYPOINT ./entry.sh
