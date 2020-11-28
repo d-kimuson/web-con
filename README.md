@@ -572,3 +572,25 @@ $-hoge-huga-height: $-hoge-height + $-huga-height;
 参考: [SMACSSによるCSSの設計 - ベースとレイアウト | CodeGrid](https://app.codegrid.net/entry/smacss-1)
 
 書き方は任せますが、再利用するクラスを定義するときは SMACSS に従って書いてください
+
+## ステージング環境
+
+本番環境周りがまだ決まってないので、とりあえず仮ですが Docker-Compose でステージング環境を作ります
+
+``` bash
+$ docker-compose up --build
+```
+
+することで、
+
+| 用途 | サーバー |
+| :---: | :---: |
+| ウェブサーバー | Nginx |
+| アプリケーションサーバー | Uwsgi |
+| データベースサーバー | MySQL |
+
+の構成で、3つのサーバーが起動します
+
+http://localhost にアクセスして、確認できます
+
+※ ローカルで建てる場合は、DBが競合するのでDBサーバーを落としてから起動する必要があります
