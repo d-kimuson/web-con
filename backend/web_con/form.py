@@ -69,14 +69,14 @@ class CreateRoomForm(forms.ModelForm):
         widget=get_calender_datetime_widget(
             min=dt_now,
             max=dt_now + timedelta(days=14),
-            step_minute=30
+            step_minute=1
         )
     )
     end_datetime = forms.DateTimeField(
         widget=get_calender_datetime_widget(
             min=dt_now,
             max=dt_now + timedelta(days=14),
-            step_minute=30
+            step_minute=1
         )
     )
 

@@ -9,10 +9,10 @@ from django.http import HttpRequest, HttpResponse
 from django.views.generic import TemplateView, DetailView, ListView, CreateView, UpdateView
 from django.db.models import Model, Q
 from django.db.models.query import QuerySet
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, ObjectDoesNotExist
 from typing import Dict, Any, Optional
 from functools import reduce
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 # from out.allauth.account import forms
 
 from util.views import ProjectBaseMixin
@@ -141,40 +141,42 @@ class UpdateRoomSettingView(ProjectBaseMixin, UpdateView):
     template_name = 'update_room_setting.html'
     form_class = CreateRoomForm
 
-    # def get_succss_url(self):
-    #     return reverse_lazy('web_con:user/<str:pk>',kwargs = {'pk': self.kwargs['pk']})
-
-    def get_queryset(self) -> QuerySet[Model]:
-        search_all = super().get_queryset()
-        search_title = self.request.GET.get('keyword', '')
-        tag_list = [key.replace('tag_', '') for key in self.request.GET.keys() if 'tag_' in key]
-        self.request.session.update({
-            'activate_tag_list': tag_list,
-            'activate_search': search_title,
-        })
-        search_all = search_all.filter(
-            reduce(lambda s, t: s | Q(roomtag__tag__pk=t), tag_list, Q(
-                title__icontains=search_title
-            )),
-        ).distinct()
-        return search_all
+    def get_success_url(self) -> str:
+        return reverse('web_con:user_profile', args=[str(self.request.user.pk)])
 
     def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
         context = super().get_context_data(**kwargs)
+        room: Room = self.get_object()  # type:ignore
         context.update({
             'tag_list': Tag.objects.all(),
-            'activate_tag_list': self.request.session['activate_tag_list'],
+            'activate_tag_list': [tag.pk for tag in room.tags],
         })
+
         return context
+
+    def form_valid(self, form: BaseModelForm) -> HttpResponse:
+        tag_all = Tag.objects.all()
+        room: Room = self.get_object()  # type:ignore
+        for tag in tag_all:
+            tag_instance = tag_all.get(pk=tag.pk)
+            if str(tag.pk) in [post_key[4:] for post_key in self.request.POST.keys()
+                               if 'tag_' in post_key]:
+                roomtag, is_success = RoomTag.objects.update_or_create(
+                    tag=tag_instance, room=room)
+            else:
+                try:
+                    roomtag = RoomTag.objects.get(
+                        tag=tag_instance, room=room)
+                    print(roomtag)
+                    print('--'*10)
+                except ObjectDoesNotExist as e:
+                    print(e)
+                    continue
+                roomtag.delete()
+
+        return super().form_valid(form)
 
 
 class ParticipateRoom(ProjectBaseMixin, DetailView):
     model = Room
     template_name = 'participate_room.html'
-
-    # def get_context_data(self, **kwargs: Any) -> Dict[str, Any]:
-    #     context = super().get_context_data(**kwargs)
-    #     context.update({
-    #         'activate_tag_list': self.request.session['activate_tag_list'],
-    #     })
-    #     return context
