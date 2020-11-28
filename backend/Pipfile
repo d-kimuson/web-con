@@ -25,6 +25,8 @@ mysqlclient = "*"
 python-dotenv = "*"
 djangorestframework = "==3.11"
 drf-spectacular = "*"
+gunicorn = "*"
+django-toolbelt = "*"
 
 [requires]
 python_version = "3.8"

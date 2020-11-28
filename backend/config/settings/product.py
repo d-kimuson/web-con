@@ -1,4 +1,5 @@
 import os
+import dj_database_url  # type: ignore
 
 from .base import *
 
@@ -17,19 +18,26 @@ if SECRET_KEY == '':
 ALLOWED_HOSTS = [
     'localhost',
     '127.0.0.1',
+    'webcon-staging.herokuapp.com'
 ]
 
 # Database
 # https://docs.djangoproject.com/en/3.0/ref/settings/#databases
+# 本番環境用 一時的にコメントアウト
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': os.environ.get('DB_NAME'),
+#         'USER': os.environ.get('DB_USER'),
+#         'PASSWORD': os.environ.get('DB_PASSWORD'),
+#         'HOST': os.environ.get('DB_HOST'),
+#         'PORT': os.environ.get('DB_PORT'),
+#     }
+# }
+
+# HEROKU用
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASSWORD'),
-        'HOST': os.environ.get('DB_HOST'),
-        'PORT': os.environ.get('DB_PORT'),
-    }
+    'default': dj_database_url.config(conn_max_age=600, ssl_require=True)
 }
 
 DEFAULT_LOGGING = {
