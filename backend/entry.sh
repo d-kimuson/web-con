@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# DB起動確認待ち
 python manage.py check &> /dev/null  # 永遠に始まらないときは、標準出力して確認したほうが良い
 STATUS_CODE=$?
 
