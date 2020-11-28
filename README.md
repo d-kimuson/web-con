@@ -573,24 +573,35 @@ $-hoge-huga-height: $-hoge-height + $-huga-height;
 
 書き方は任せますが、再利用するクラスを定義するときは SMACSS に従って書いてください
 
-## ステージング環境
+## ステージング環境 (Heroku)
 
-本番環境周りがまだ決まってないので、とりあえず仮ですが Docker-Compose でステージング環境を作ります
+Heroku にとりあえずのステージング環境が構築されています
+
+CIとかは実装してないので、ローカルのファイルから Docker Image を投げてデプロイしている形です
+
+https://webcon-staging.herokuapp.com/
+
+から確認できます
+
+手元から操作したい場合は、
+
+1. [Heroku](https://jp.heroku.com/) のアカウント作成
+1. コラボレーターへの追加依頼( @d-kimuson まで)
+1. [Heroku CLI のセットアップ](https://devcenter.heroku.com/articles/heroku-cli)
+
+をした上で、
 
 ``` bash
-$ docker-compose up --build
+$ heroku login
+$ git remote add heroku https://git.heroku.com/webcon-staging.git
 ```
 
-することで、
+をすれば、各 Heroku コマンドを利用できるはずです(手元にコラボレータアカウントがないので試せてないです)
 
-| 用途 | サーバー |
-| :---: | :---: |
-| ウェブサーバー | Nginx |
-| アプリケーションサーバー | Uwsgi |
-| データベースサーバー | MySQL |
+``` bash
+$ ./bin/deploy-staging.sh  # デプロイ
+$ heroku run <command>     # コンテナでコマンドを実行
+$ heroku open              # アプリを開く
+```
 
-の構成で、3つのサーバーが起動します
-
-http://localhost にアクセスして、確認できます
-
-※ ローカルで建てる場合は、DBが競合するのでDBサーバーを落としてから起動する必要があります
+とかとかができます
