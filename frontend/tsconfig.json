@@ -29,7 +29,8 @@
     "strict": true,
   },
   "files": [
-    "./static/@types/globals.d.ts"
+    "./static/@types/globals.d.ts",
+    "./node_modules/@types/node/index.d.ts"
   ],
   "include": [
     "./static/**/*",

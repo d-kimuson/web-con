@@ -5,7 +5,7 @@ WORKDIR /frontend
 COPY ./frontend /frontend
 
 RUN yarn install
-RUN yarn build
+RUN yarn build:staging
 
 # Build Backend Django Packages
 FROM python:3.8.6-buster

@@ -5,6 +5,7 @@
   "devDependencies": {
     "@openapitools/openapi-generator-cli": "^2.1.4",
     "@tsconfig/svelte": "^1.0.10",
+    "@types/node": "^14.14.10",
     "@typescript-eslint/eslint-plugin": "^4.4.1",
     "@typescript-eslint/parser": "^4.6.0",
     "autoprefixer": "^10.0.1",
@@ -46,8 +47,9 @@
     "webpack-merge": "^5.3.0"
   },
   "scripts": {
-    "build": "webpack --mode=production",
-    "dev": "webpack-dev-server --mode=development",
+    "build": "DEPLOY_ENV=production webpack --mode=production",
+    "build:staging": "DEPLOY_ENV=staging webpack --mode=production",
+    "dev": "DEPLOY_ENV=development webpack-dev-server --mode=development",
     "lint": "yarn run lint:eslint && yarn run lint:stylelint",
     "lint:eslint": "eslint static --ext .ts --fix",
     "lint:stylelint": "stylelint 'static/styles/**/*.scss' --fix",

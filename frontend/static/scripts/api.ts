@@ -11,7 +11,21 @@ export const api = axios.create({
 })
 
 const config = new Configuration()
-export const endpoints = getEndpoints(config, `http://localhost:3000`, api)
+let basePath: string | undefined
+
+switch (process.env.DEPLOY_ENV) {
+  case `production`:
+    basePath = undefined
+    break
+  case `staging`:
+    basePath = `https://webcon-staging.herokuapp.com`
+    break
+  default:
+    // development
+    basePath = `http://localhost:8000`
+}
+
+export const endpoints = getEndpoints(config, basePath, api)
 
 // openapi を使うようになったので、削除予定です
 // 一応しばらくの間だけ残しておきます
