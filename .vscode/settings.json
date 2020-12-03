@@ -15,7 +15,7 @@
   "python.linting.flake8Enabled": true,
   "python.linting.flake8Args": [
     "--config=backend/.flake8",
-    "--exclude config/settings" // .flake8 の設定が適用されないので止む無く
+    "--exclude config/settings", // .flake8 の設定が適用されないので止む無く
   ],
   "python.analysis.typeCheckingMode": "off",
   "python.linting.mypyEnabled": false,
@@ -23,7 +23,7 @@
   "mypy.executable": "${workspaceFolder}/backend/.venv/bin/mypyls",
   "mypy.configFile": "./backend/mypy.ini",
   "mypy.targets": [
-    "./backend"
+    "./backend",
   ],
   "python.testing.unittestEnabled": false,
   "python.testing.nosetestsEnabled": false,
@@ -43,7 +43,7 @@
   },
   "eslint.validate": [
     "javascript",
-    "typescript"
+    "typescript",
   ],
   "eslint.alwaysShowStatus": true,
   // Stylelint
@@ -60,9 +60,9 @@
   "editor.formatOnSave": false,
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true,
-    "source.fixAll.stylelint": true
+    "source.fixAll.stylelint": true,
   },
   // Invalidate other formatters
   "css.validate": false,
-  "scss.validate": false
+  "scss.validate": false,
 }
