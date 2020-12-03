@@ -3,3 +3,6 @@
 BINARY_PATH=$(git rev-parse --show-toplevel)/bin/
 
 bash $BINARY_PATH/check.sh
+# リンター類で自動フォーマットされた状態でステージングに含める
+# [WARN] git add -p で部分ステージングがコミットのタイミングで上書きされるので注意
+git diff --name-only --cached | xargs git add
