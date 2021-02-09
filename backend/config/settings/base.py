@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
     'webpack_loader',
     'accounts.apps.AccountsConfig',
     'web_con.apps.WebConConfig',
@@ -84,7 +85,18 @@ LOGIN_REDIRECT_URL = "/"
 
 # All Auth
 SITE_ID = 1
-# SOCIALACCOUNT_PROVIDERS = {}
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'SCOPE': [
+            'profile',
+            'email',
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'online',
+        }
+    }
+}
+
 ACCOUNT_USER_MODEL_USERNAME_FIELD: Optional[str] = None
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_USERNAME_REQUIRED = False

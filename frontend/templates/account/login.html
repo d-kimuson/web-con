@@ -14,8 +14,7 @@
   <!-- ソーシャルログイン -->
   <!-- 現時点では使ってないので、そのままにしておく -->
   {% if socialaccount_providers %}
-  <p>Please sign in with one of your existing third party accounts. Or, <a href="{{ signup_url }}">sign up</a>
-    for a {{ site_name }} account and sign in below:</p>
+  <p><a href="{{ signup_url }}">アカウント作成</a>または下記のgoogleからログインしてください。</p>
 
   <div class="socialaccount_ballot">
 
@@ -23,7 +22,7 @@
       {% include "socialaccount/snippets/provider_list.html" with process="login" %}
     </ul>
 
-    <div class="login-or">or</div>
+    <!-- <div class="login-or">or</div> -->
   </div>
 
   {% include "socialaccount/snippets/login_extra.html" %}
