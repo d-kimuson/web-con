@@ -15,6 +15,7 @@ urlpatterns = [
     path('setting_recruit', views.SettingRecruitView.as_view(), name='setting_recruit'),
     path('update_room_setting/<str:pk>', views.UpdateRoomSettingView.as_view(), name='update_room_setting'),
     path('participate_room/<str:pk>', views.ParticipateRoom.as_view(), name='participate_room'),
+    path('delete_room/<str:pk>', views.DeleteRoom.as_view(), name='delete_room'),
 ]
 
 if settings.DEBUG:

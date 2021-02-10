@@ -6,7 +6,7 @@ from django.forms.models import BaseModelForm
 from django.http.response import Http404
 from django.shortcuts import redirect
 from django.http import HttpRequest, HttpResponse
-from django.views.generic import TemplateView, DetailView, ListView, CreateView, UpdateView
+from django.views.generic import TemplateView, DetailView, ListView, CreateView, UpdateView, DeleteView
 from django.db.models import Model, Q
 from django.db.models.query import QuerySet
 from django.core.exceptions import ValidationError, ObjectDoesNotExist
@@ -180,3 +180,11 @@ class UpdateRoomSettingView(ProjectBaseMixin, UpdateView):
 class ParticipateRoom(ProjectBaseMixin, DetailView):
     model = Room
     template_name = 'participate_room.html'
+
+
+class DeleteRoom(ProjectBaseMixin, DeleteView):
+    model = Room
+    template_name = 'delete_room.html'
+
+    def get_success_url(self) -> str:
+        return reverse('web_con:user_profile', args=[str(self.request.user.pk)])

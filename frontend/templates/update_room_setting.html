@@ -32,6 +32,10 @@
   </form>
 </section>
 
+<h1>部屋を削除</h1>
+<section>
+  <a href="{% url 'web_con:delete_room' room.pk %}">削除する</p>
+</section>
 {% endblock %}
 
 {% block external_footer %}

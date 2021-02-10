@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load render_bundle from webpack_loader %}
+
+{% block external_header %}
+{% render_bundle 'setting_recruit' 'css' %}
+{% endblock %}
+
+{% block title %}Index{% endblock %}
+
+{% block content %}
+<h1>部屋を削除する</h1>
+<form method="post">
+  {% csrf_token %}
+  <p>本当に削除します？</p>
+  <input type="submit" value="削除する" class="m-button">
+</form>
+
+
+{% endblock %}
+
+{% block external_footer %}
+{% render_bundle 'setting_recruit' 'js' %}
+{% endblock %}
